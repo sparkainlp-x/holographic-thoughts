@@ -1,0 +1,1296 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" href="data:," />
+    <title>Holographic Thoughts</title>
+    <style>
+      :root {
+        --bg: #04060c;
+        --bg2: #070b14;
+        --panel: #0a0f1a;
+        --panel2: #0d1424;
+        --line: #1c2940;
+        --line-soft: #131e31;
+        --text: #c9d6e8;
+        --dim: #7186a3;
+        --faint: #43536d;
+        --cyan: #39d5e8;
+        --cyan-dim: #1d7f8f;
+        --amber: #ffb454;
+        --green: #3ddc84;
+        --red: #ff5a5a;
+        --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+        --sans: "Avenir Next", "Segoe UI", system-ui, -apple-system, sans-serif;
+      }
+      * { box-sizing: border-box; }
+      html { background: var(--bg); }
+      body {
+        margin: 0;
+        background:
+          radial-gradient(1200px 500px at 50% -120px, rgba(28, 60, 92, 0.20), transparent 70%),
+          var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        font-size: 15px;
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+      }
+      .wrap { max-width: 1060px; margin: 0 auto; padding: 0 16px 64px; }
+
+      header.thesis {
+        padding: 26px 4px 14px;
+        border-bottom: 1px solid var(--line-soft);
+      }
+      header.thesis p {
+        margin: 0;
+        font-size: 17px;
+        letter-spacing: 0.01em;
+        color: var(--text);
+      }
+      header.thesis p .accent { color: var(--cyan); }
+      header.thesis .sub {
+        margin-top: 4px;
+        font-size: 13px;
+        color: var(--dim);
+      }
+
+      nav.tabs {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        padding: 14px 0 4px;
+        position: sticky;
+        top: 0;
+        background: linear-gradient(var(--bg) 82%, transparent);
+        z-index: 5;
+      }
+      nav.tabs button {
+        appearance: none;
+        background: var(--panel);
+        color: var(--dim);
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 9px 16px;
+        min-height: 42px;
+        font: inherit;
+        font-size: 13.5px;
+        cursor: pointer;
+        transition: color .15s, border-color .15s, background .15s;
+      }
+      nav.tabs button:hover { color: var(--text); border-color: var(--cyan-dim); }
+      nav.tabs button[aria-selected="true"] {
+        color: #04121a;
+        background: var(--cyan);
+        border-color: var(--cyan);
+        font-weight: 600;
+      }
+      nav.tabs button .n { font-family: var(--mono); font-size: 11px; opacity: .75; margin-right: 6px; }
+
+      section.view { padding-top: 18px; }
+      section.view[hidden] { display: none; }
+      .view-head h2 {
+        margin: 0 0 2px;
+        font-size: 21px;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+      }
+      .view-head p { margin: 0 0 14px; color: var(--dim); font-size: 13.5px; max-width: 72ch; }
+      .view-head p b, .view-head p strong { color: var(--text); font-weight: 600; }
+
+      .stage {
+        background: var(--panel);
+        border: 1px solid var(--line-soft);
+        border-radius: 10px;
+        padding: 10px;
+      }
+      canvas.plot { display: block; width: 100%; height: auto; }
+      .chart-label {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--faint);
+        margin: 8px 2px 4px;
+        letter-spacing: 0.04em;
+      }
+
+      .split {
+        display: grid;
+        grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+        gap: 14px;
+        align-items: start;
+      }
+      @media (max-width: 780px) {
+        .split { grid-template-columns: minmax(0, 1fr); }
+      }
+      aside.panel {
+        background: var(--panel);
+        border: 1px solid var(--line-soft);
+        border-radius: 10px;
+        padding: 14px 16px;
+      }
+      aside.panel h3 {
+        margin: 0 0 10px;
+        font-size: 12px;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+        color: var(--dim);
+        font-weight: 600;
+      }
+
+      .bar-row { margin-bottom: 10px; }
+      .bar-row .bar-top {
+        display: flex; justify-content: space-between; align-items: baseline;
+        font-size: 13px; margin-bottom: 3px;
+      }
+      .bar-row .bar-name { color: var(--text); }
+      .bar-row .bar-val { font-family: var(--mono); font-size: 12px; color: var(--dim); }
+      .bar-row.winner .bar-name { color: var(--cyan); font-weight: 600; }
+      .bar-row.winner .bar-val { color: var(--cyan); }
+      .bar-track {
+        height: 8px;
+        background: var(--bg2);
+        border: 1px solid var(--line-soft);
+        border-radius: 4px;
+        overflow: hidden;
+      }
+      .bar-fill {
+        height: 100%;
+        width: 0%;
+        background: var(--cyan-dim);
+        transition: width .35s ease;
+      }
+      .bar-row.winner .bar-fill { background: var(--cyan); }
+
+      .readout {
+        font-family: var(--mono);
+        font-size: 12.5px;
+        color: var(--text);
+        background: var(--bg2);
+        border: 1px solid var(--line-soft);
+        border-radius: 8px;
+        padding: 10px 12px;
+        margin-top: 12px;
+        white-space: pre-line;
+        min-height: 42px;
+      }
+      .readout .ok { color: var(--green); }
+      .readout .bad { color: var(--red); }
+      .readout .cy { color: var(--cyan); }
+      .readout .am { color: var(--amber); }
+      .tally {
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--dim);
+        margin-top: 8px;
+      }
+
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px 18px;
+        align-items: center;
+        margin-top: 14px;
+        padding: 12px 14px;
+        background: var(--panel);
+        border: 1px solid var(--line-soft);
+        border-radius: 10px;
+      }
+      .controls label {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        color: var(--dim);
+        min-height: 44px;
+      }
+      .controls label .val { font-family: var(--mono); color: var(--text); min-width: 3.2em; }
+      input[type="range"] {
+        accent-color: var(--cyan);
+        width: 130px;
+        height: 28px;
+        cursor: pointer;
+      }
+      button.act {
+        appearance: none;
+        background: var(--panel2);
+        color: var(--text);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 10px 18px;
+        min-height: 44px;
+        font: inherit;
+        font-size: 14px;
+        cursor: pointer;
+        transition: border-color .15s, background .15s, color .15s;
+      }
+      button.act:hover { border-color: var(--cyan-dim); }
+      button.act.primary {
+        background: var(--cyan);
+        border-color: var(--cyan);
+        color: #04121a;
+        font-weight: 600;
+      }
+      button.act.primary:hover { background: #5fe0f2; }
+      button.act.danger { border-color: #5a2b32; color: #ff9a9a; }
+      button.act.danger:hover { border-color: var(--red); }
+      button.act[aria-pressed="true"] {
+        background: var(--cyan);
+        border-color: var(--cyan);
+        color: #04121a;
+        font-weight: 600;
+      }
+      button.act:disabled { opacity: .45; cursor: not-allowed; }
+
+      .meter { margin-top: 10px; }
+      .meter .meter-top {
+        display: flex; justify-content: space-between;
+        font-size: 12.5px; color: var(--dim); margin-bottom: 4px;
+      }
+      .meter .meter-top .val { font-family: var(--mono); color: var(--text); }
+      .meter .meter-track {
+        height: 10px; border-radius: 5px;
+        background: var(--bg2); border: 1px solid var(--line-soft);
+        overflow: hidden;
+      }
+      .meter .meter-fill {
+        height: 100%; width: 0%;
+        background: var(--amber);
+        transition: width .3s ease;
+      }
+
+      .honesty {
+        margin: 16px 2px 0;
+        font-size: 12px;
+        color: var(--faint);
+        border-top: 1px solid var(--line-soft);
+        padding-top: 10px;
+      }
+      .honesty .ref { color: var(--dim); }
+
+      .legend {
+        display: flex; flex-wrap: wrap; gap: 6px 18px;
+        font-size: 12.5px; color: var(--dim);
+        margin: 8px 2px 0;
+      }
+      .legend .sw {
+        display: inline-block; width: 10px; height: 10px; border-radius: 50%;
+        margin-right: 6px; vertical-align: -1px;
+      }
+      footer.page a { color: var(--dim); }
+      footer.page {
+        margin-top: 40px;
+        font-size: 12px;
+        color: var(--faint);
+        border-top: 1px solid var(--line-soft);
+        padding-top: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="thesis">
+        <p>Holographic thoughts, made visible — <span class="accent">every pixel computed, nothing canned.</span></p>
+        <p class="sub">Four live simulations of the membrane models: projection recall, the yin–yang predictive loop, Hebbian crystallization, and the refusing gate. Phase is hue; magnitude is brightness.</p>
+      </header>
+
+      <nav class="tabs" role="tablist" aria-label="Views">
+        <button role="tab" id="tab-field" aria-selected="true" aria-controls="view-field" data-view="field"><span class="n">01</span>The Thought Field</button>
+        <button role="tab" id="tab-loop" aria-selected="false" aria-controls="view-loop" data-view="loop"><span class="n">02</span>The Loop</button>
+        <button role="tab" id="tab-crystal" aria-selected="false" aria-controls="view-crystal" data-view="crystal"><span class="n">03</span>Crystallization</button>
+        <button role="tab" id="tab-gate" aria-selected="false" aria-controls="view-gate" data-view="gate"><span class="n">04</span>The Gate</button>
+      </nav>
+
+      <!-- ============ VIEW 1 : THE THOUGHT FIELD ============ -->
+      <section class="view" id="view-field" role="tabpanel" aria-labelledby="tab-field">
+        <div class="view-head">
+          <h2>The Thought Field</h2>
+          <p>Sixteen complex oscillators hold <b>four stored patterns</b> — thoughts. A noisy probe is sent in; recall is pure <b>projection</b>: the field keeps only the part of the probe that lies in the span of the stored patterns, and the overlaps m<sub>i</sub> = ⟨p<sub>i</sub>|probe⟩ decide which thought it was. Watch the ring morph from noise back into a thought.</p>
+        </div>
+        <div class="split">
+          <div class="stage">
+            <canvas class="plot" id="fieldCanvas" width="560" height="560" aria-label="Ring of 16 oscillators showing the current field state"></canvas>
+          </div>
+          <aside class="panel">
+            <h3>Overlaps · |m<sub>i</sub>|² share</h3>
+            <div id="overlapBars"></div>
+            <div class="readout" id="fieldReadout">The field is holding thought 1. Send a probe to test recall.</div>
+            <div class="tally" id="fieldTally">session tally — correct 0 · incorrect 0</div>
+          </aside>
+        </div>
+        <div class="controls">
+          <label>noise σ <input type="range" id="fieldSigma" min="0" max="0.6" step="0.01" value="0.25" /><span class="val" id="fieldSigmaVal">0.25</span></label>
+          <button class="act primary" id="probeBtn">Send probe</button>
+          <button class="act" id="streamBtn" aria-pressed="false">Auto-stream</button>
+        </div>
+        <p class="honesty">Live toy simulation in your browser — see the Python models (membrane-crystallization, refusing-membrane, quantum-projection) for the measured numbers. <span class="ref">Recall here is one-shot projection onto the stored patterns — the same operation the Python quantum-projection model measures.</span></p>
+      </section>
+
+      <!-- ============ VIEW 2 : THE LOOP ============ -->
+      <section class="view" id="view-loop" role="tabpanel" aria-labelledby="tab-loop" hidden>
+        <div class="view-head">
+          <h2>The Loop — yin &amp; yang membranes</h2>
+          <p>Two rings of 48 phase oscillators chase conjugate traveling waves. Each membrane is pulled toward its own pattern and toward its partner: yin reads yang's <b>present</b> shape error, yang reads yin's <b>predicted next</b> state — the asymmetric “tic”. Dot color is tracking error: <b>cyan = locked, red = lost</b>. Destroy yang and watch whether yin can resurrect it through the loop.</p>
+        </div>
+        <div class="stage">
+          <canvas class="plot" id="loopCanvas" width="920" height="520" aria-label="Two concentric rings of phase oscillators, yin inside, yang outside"></canvas>
+          <div class="legend">
+            <span><span class="sw" style="background:var(--cyan)"></span>yin — inner ring</span>
+            <span><span class="sw" style="background:var(--amber)"></span>yang — outer ring</span>
+            <span>dot hue = tracking error (cyan locked → red lost)</span>
+          </div>
+          <div class="chart-label">OVERLAP vs TIME — |Σ e<sup>i(P−A)</sup>| / n</div>
+          <canvas class="plot" id="loopChart" width="920" height="150" aria-label="Scrolling chart of overlap for both membranes"></canvas>
+        </div>
+        <div class="controls">
+          <button class="act primary" id="loopPlayBtn">Pause</button>
+          <label>coupling κ <input type="range" id="loopKappa" min="0" max="0.9" step="0.01" value="0.45" /><span class="val" id="loopKappaVal">0.45</span></label>
+          <button class="act" id="damageBtn" aria-pressed="false">Damage: complementary amnesia</button>
+          <button class="act danger" id="destroyBtn">Destroy yang</button>
+        </div>
+        <div class="readout" id="loopReadout">overlap yin — · yang — · ticks since destruction —</div>
+        <p class="honesty">Live toy simulation in your browser — see the Python models (membrane-crystallization, refusing-membrane, quantum-projection) for the measured numbers. <span class="ref">No published Python reference model for this view yet; the coupled-loop behaviour shown here is illustrative only and has not been measured.</span></p>
+      </section>
+
+      <!-- ============ VIEW 3 : CRYSTALLIZATION ============ -->
+      <section class="view" id="view-crystal" role="tabpanel" aria-labelledby="tab-crystal" hidden>
+        <div class="view-head">
+          <h2>Crystallization — watching learning happen</h2>
+          <p>A stream of noisy observations — three Bell-state patterns in 8 dimensions, arriving with frequencies 0.6 / 0.3 / 0.1 — is folded into a memory matrix by Hebbian updates, W ← (1−α)W + α|x⟩⟨x|. The spectrum of W is eigendecomposed live. Crystallization is not “entropy falls”: watch the <b>top-3 eigenvalues</b> separate, the <b>subspace fidelity</b> climb, and the leftover residue turn <b>white</b> — structure extracted, noise left behind.</p>
+        </div>
+        <div class="stage">
+          <div class="chart-label">EIGENVALUE SPECTRUM OF W — TOP 3 HIGHLIGHTED</div>
+          <canvas class="plot" id="specCanvas" width="920" height="190" aria-label="Bar chart of the eight eigenvalues of the memory matrix"></canvas>
+          <div class="chart-label">TRACES — SUBSPACE FIDELITY (CYAN, 0–1) · SPECTRUM ENTROPY / log 8 (AMBER)</div>
+          <canvas class="plot" id="traceCanvas" width="920" height="200" aria-label="Scrolling traces of subspace fidelity and spectrum entropy"></canvas>
+        </div>
+        <div class="split" style="margin-top:14px">
+          <aside class="panel">
+            <h3>Live readouts</h3>
+            <div class="readout" id="crystalReadout" style="margin-top:0">Press play to start the stream.</div>
+          </aside>
+          <aside class="panel">
+            <h3>Residue whiteness</h3>
+            <div class="meter">
+              <div class="meter-top"><span>entropy of residue spectrum / log(N−K)</span><span class="val" id="whiteVal">0.000</span></div>
+              <div class="meter-track"><div class="meter-fill" id="whiteFill"></div></div>
+            </div>
+            <p style="font-size:12.5px;color:var(--dim);margin:10px 0 0">1.0 = the residue is pure white noise — nothing learnable left in it. The Python model measured 0.993 at k=3 (isotropic noise), but a pure-noise stream scores about as white (0.995), so it is not a completion criterion.</p>
+          </aside>
+        </div>
+        <div class="controls">
+          <button class="act primary" id="crystalPlayBtn">Play</button>
+          <button class="act" id="crystalResetBtn">Reset W</button>
+        </div>
+        <p class="honesty">Live toy simulation in your browser — see the Python models (membrane-crystallization, refusing-membrane, quantum-projection) for the measured numbers. <span class="ref">Python reference (membrane-crystallization, σ 0.25): subspace fidelity 0.96–0.97; residue whiteness 0.993 (not discriminative: pure noise scores 0.995); self-recreation match fidelity 0.953 → 0.798 from generation 1 to 5.</span></p>
+      </section>
+
+      <!-- ============ VIEW 4 : THE GATE ============ -->
+      <section class="view" id="view-gate" role="tabpanel" aria-labelledby="tab-gate" hidden>
+        <div class="view-head">
+          <h2>The Gate — a membrane that can refuse</h2>
+          <p>Four patterns live in the library: GHZ, W, |000⟩, |+++⟩. A probe is accepted only if its best overlap clears a threshold τ. First <b>calibrate</b>: 200 labeled probes (half noisy library members, half random strangers) sweep τ to maximize Youden's J — then τ freezes. Stream probes and watch the gate decide; raise σ to 0.5 and feel distribution shift.</p>
+        </div>
+        <div class="stage">
+          <div class="chart-label">YOUDEN'S J vs τ — FROM CALIBRATION PROBES</div>
+          <canvas class="plot" id="jCanvas" width="920" height="210" aria-label="Curve of Youden's J against threshold tau, with the chosen tau marked"></canvas>
+          <div class="chart-label">PROBE STRIP — x = MAX OVERLAP · GREEN ACCEPT / RED REFUSE · LINE = τ</div>
+          <canvas class="plot" id="stripCanvas" width="920" height="180" aria-label="Strip of streamed probes plotted by max overlap, colored by accept or refuse"></canvas>
+        </div>
+        <div class="controls">
+          <button class="act primary" id="calibBtn">Calibrate τ</button>
+          <button class="act" id="gateStreamBtn" aria-pressed="false" disabled>Stream probes</button>
+          <label>stream σ <input type="range" id="gateSigma" min="0" max="0.8" step="0.01" value="0.25" /><span class="val" id="gateSigmaVal">0.25</span></label>
+        </div>
+        <div class="readout" id="gateReadout">No τ yet — calibrate first. The gate refuses to guess a threshold.</div>
+        <p class="honesty">Live toy simulation in your browser — see the Python models (membrane-crystallization, refusing-membrane, quantum-projection) for the measured numbers. <span class="ref">Python reference (refusing-membrane): τ = 0.700, accuracy-on-accepted 0.995; under distribution shift (σ 0.25 → 0.50) it caught 75.6% of new errors.</span></p>
+      </section>
+
+      <footer class="page">
+        All four views run the actual mathematics in your browser — complex projection, the predictive cross-coupling, Hebbian updates with live eigendecomposition, and a calibrated refusal threshold. Toy scale (N ≤ 48); the measured numbers live in the Python models.
+        <br /><br />
+        Synthetic toy, classical simulation — not physical holography or quantum hardware. Author: Jean-François Brisson · ORCID <a href="https://orcid.org/0009-0000-9778-5374">0009-0000-9778-5374</a> · Models: <a href="https://github.com/sparkainlp-x/membrane-crystallization">membrane-crystallization</a> · <a href="https://github.com/sparkainlp-x/refusing-membrane">refusing-membrane</a> · <a href="https://github.com/sparkainlp-x/quantum-projection">quantum-projection</a> · Source: <a href="https://github.com/sparkainlp-x/holographic-thoughts">holographic-thoughts</a> · Licence: <a href="https://github.com/sparkainlp-x/holographic-thoughts/blob/main/LICENSE">AGPL-3.0-only</a>
+      </footer>
+    </div>
+
+<script>
+"use strict";
+/* ================= shared helpers ================= */
+// Complex numbers are [re, im]. Vectors are arrays of complex numbers.
+const C = {
+  add: (a, b) => [a[0] + b[0], a[1] + b[1]],
+  sub: (a, b) => [a[0] - b[0], a[1] - b[1]],
+  mul: (a, b) => [a[0] * b[0] - a[1] * b[1], a[0] * b[1] + a[1] * b[0]],
+  scale: (a, s) => [a[0] * s, a[1] * s],
+  conj: (a) => [a[0], -a[1]],
+  abs: (a) => Math.hypot(a[0], a[1]),
+  phase: (a) => Math.atan2(a[1], a[0]),
+  fromPolar: (r, t) => [r * Math.cos(t), r * Math.sin(t)]
+};
+function inner(a, b) { // <a|b> = sum conj(a_k) * b_k
+  let re = 0, im = 0;
+  for (let k = 0; k < a.length; k++) {
+    const c = C.mul(C.conj(a[k]), b[k]);
+    re += c[0]; im += c[1];
+  }
+  return [re, im];
+}
+function vnorm(v) {
+  let s = 0;
+  for (const z of v) s += z[0] * z[0] + z[1] * z[1];
+  return Math.sqrt(s);
+}
+function vnormalize(v) {
+  const n = vnorm(v) || 1;
+  return v.map(z => [z[0] / n, z[1] / n]);
+}
+function mulberry32(seed) {
+  let a = seed >>> 0;
+  return function () {
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function makeGauss(rng) { // Box-Muller, standard normal
+  let spare = null;
+  return function () {
+    if (spare !== null) { const v = spare; spare = null; return v; }
+    let u = 0, v = 0, s = 0;
+    do { u = rng() * 2 - 1; v = rng() * 2 - 1; s = u * u + v * v; } while (s >= 1 || s === 0);
+    const m = Math.sqrt(-2 * Math.log(s) / s);
+    spare = v * m;
+    return u * m;
+  };
+}
+const gauss = makeGauss(Math.random);
+function wrapA(a) { // fold angle to (-pi, pi]
+  a = a % (2 * Math.PI);
+  if (a > Math.PI) a -= 2 * Math.PI;
+  if (a <= -Math.PI) a += 2 * Math.PI;
+  return a;
+}
+function setupCanvas(id, w, h) {
+  const cv = document.getElementById(id);
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  cv.width = w * dpr; cv.height = h * dpr;
+  const ctx = cv.getContext("2d");
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return { cv, ctx, w, h };
+}
+const INK = "#c9d6e8", DIM = "#7186a3", FAINT = "#43536d", LINE = "#1c2940",
+      CYAN = "#39d5e8", AMBER = "#ffb454", GREEN = "#3ddc84", RED = "#ff5a5a";
+function fmt(x, d) { return (x === null || x === undefined || isNaN(x)) ? "—" : x.toFixed(d === undefined ? 3 : d); }
+
+/* ================= VIEW 1 : THE THOUGHT FIELD ================= */
+const Field = (() => {
+  const N = 16;
+  const { ctx, w, h } = setupCanvas("fieldCanvas", 560, 560);
+  // Four stored patterns (unit complex vectors).
+  const patterns = [];
+  const labels = [];
+  { // 1: traveling wave e^{2 pi i k / N}
+    const v = [];
+    for (let k = 0; k < N; k++) v.push(C.fromPolar(1, 2 * Math.PI * k / N));
+    patterns.push(vnormalize(v)); labels.push("traveling wave");
+  }
+  { // 2: localized pulse (Gaussian bump of amplitude, zero phase)
+    const v = [];
+    for (let k = 0; k < N; k++) {
+      const d = Math.min(Math.abs(k - 4), N - Math.abs(k - 4));
+      v.push([Math.exp(-(d * d) / (2 * 1.6 * 1.6)), 0]);
+    }
+    patterns.push(vnormalize(v)); labels.push("localized pulse");
+  }
+  { // 3: checkerboard phase (alternating 0 / pi)
+    const v = [];
+    for (let k = 0; k < N; k++) v.push([k % 2 === 0 ? 1 : -1, 0]);
+    patterns.push(vnormalize(v)); labels.push("checkerboard");
+  }
+  { // 4: fixed random vector, seed 7
+    const rng = mulberry32(7), g = makeGauss(rng), v = [];
+    for (let k = 0; k < N; k++) v.push([g(), g()]);
+    patterns.push(vnormalize(v)); labels.push("seed-7 tangle");
+  }
+  const barsEl = document.getElementById("overlapBars");
+  const barRows = patterns.map((p, i) => {
+    const row = document.createElement("div");
+    row.className = "bar-row";
+    row.innerHTML = '<div class="bar-top"><span class="bar-name">thought ' + (i + 1) + " · " + labels[i] +
+      '</span><span class="bar-val">0.000</span></div><div class="bar-track"><div class="bar-fill"></div></div>';
+    barsEl.appendChild(row);
+    return { row, fill: row.querySelector(".bar-fill"), val: row.querySelector(".bar-val") };
+  });
+  const readout = document.getElementById("fieldReadout");
+  const tallyEl = document.getElementById("fieldTally");
+  const sigmaEl = document.getElementById("fieldSigma");
+  const sigmaVal = document.getElementById("fieldSigmaVal");
+  sigmaEl.addEventListener("input", () => { sigmaVal.textContent = Number(sigmaEl.value).toFixed(2); });
+
+  let display = patterns[0].map(z => [z[0], z[1]]); // what the ring shows now
+  let morph = null; // {from, to, t0}
+  let correct = 0, incorrect = 0;
+  let streaming = false, lastStream = 0;
+
+  function overlaps(probe) {
+    return patterns.map(p => C.abs(inner(p, probe)));
+  }
+  function showBars(probe) {
+    const m = overlaps(probe);
+    let denom = 0; for (const x of m) denom += x * x;
+    let winner = 0;
+    for (let i = 0; i < m.length; i++) if (m[i] > m[winner]) winner = i;
+    barRows.forEach((b, i) => {
+      const share = denom > 0 ? (m[i] * m[i]) / denom : 0;
+      b.fill.style.width = (share * 100).toFixed(1) + "%";
+      b.val.textContent = share.toFixed(3);
+      b.row.classList.toggle("winner", i === winner);
+    });
+    return { m, winner };
+  }
+  showBars(display); // initial bars describe the state the field is holding
+  function sendProbe(now) {
+    const sigma = Number(sigmaEl.value);
+    const truth = Math.floor(Math.random() * patterns.length);
+    const noisy = patterns[truth].map(z => [z[0] + gauss() * sigma, z[1] + gauss() * sigma]);
+    const probe = vnormalize(noisy);
+    const { m, winner } = showBars(probe);
+    // recall = projection of probe onto span(patterns), renormalized
+    let rec = probe.map(() => [0, 0]);
+    patterns.forEach((p, i) => {
+      const mi = inner(p, probe);
+      rec = rec.map((z, k) => C.add(z, C.mul(mi, p[k])));
+    });
+    rec = vnormalize(rec);
+    morph = { from: display.map(z => [z[0], z[1]]), probe, to: rec, t0: now, dur: 650 };
+    const ok = winner === truth;
+    if (ok) correct++; else incorrect++;
+    readout.innerHTML =
+      "true thought: <span class='cy'>" + (truth + 1) + " · " + labels[truth] + "</span>\n" +
+      "recalled as:  <span class='cy'>" + (winner + 1) + " · " + labels[winner] + "</span>  " +
+      (ok ? "<span class='ok'>correct</span>" : "<span class='bad'>misread</span>") +
+      "\nwinner overlap |m| = " + fmt(m[winner]) + "  ·  σ = " + sigma.toFixed(2);
+    tallyEl.textContent = "session tally — correct " + correct + " · incorrect " + incorrect;
+  }
+  document.getElementById("probeBtn").addEventListener("click", () => sendProbe(performance.now()));
+  const streamBtn = document.getElementById("streamBtn");
+  streamBtn.addEventListener("click", () => {
+    streaming = !streaming;
+    streamBtn.setAttribute("aria-pressed", String(streaming));
+    streamBtn.textContent = streaming ? "Auto-stream: on" : "Auto-stream";
+    lastStream = 0;
+  });
+
+  function ease(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+  function draw(now) {
+    // state to show: probe first (snap), then morph probe -> recalled
+    if (morph) {
+      const t = Math.min(1, (now - morph.t0) / morph.dur);
+      if (t < 0.28) {
+        display = morph.probe;
+      } else {
+        const e = ease((t - 0.28) / 0.72);
+        display = vnormalize(morph.probe.map((a, k) => {
+          const b = morph.to[k];
+          return [a[0] + (b[0] - a[0]) * e, a[1] + (b[1] - a[1]) * e];
+        }));
+      }
+      if (t >= 1) { display = morph.to; morph = null; }
+    }
+    if (streaming && now - lastStream > 1700) { lastStream = now; sendProbe(now); }
+    const cx = w / 2, cy = h / 2, R = Math.min(w, h) / 2 - 56;
+    ctx.clearRect(0, 0, w, h);
+    // ring guide
+    ctx.beginPath();
+    ctx.arc(cx, cy, R, 0, 2 * Math.PI);
+    ctx.strokeStyle = LINE; ctx.lineWidth = 1; ctx.stroke();
+    // connect neighbours faintly (the field as one object)
+    ctx.beginPath();
+    for (let k = 0; k <= N; k++) {
+      const z = display[k % N];
+      const ang = -Math.PI / 2 + 2 * Math.PI * (k % N) / N;
+      const rr = R * (0.82 + 0.30 * C.abs(z));
+      const x = cx + rr * Math.cos(ang), y = cy + rr * Math.sin(ang);
+      if (k === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = "rgba(57,213,232,0.16)"; ctx.lineWidth = 1; ctx.stroke();
+    let maxMag = 0;
+    for (const z of display) maxMag = Math.max(maxMag, C.abs(z));
+    for (let k = 0; k < N; k++) {
+      const z = display[k];
+      const ang = -Math.PI / 2 + 2 * Math.PI * k / N;
+      const x = cx + R * Math.cos(ang), y = cy + R * Math.sin(ang);
+      const magF = maxMag > 0 ? C.abs(z) / maxMag : 0;
+      const hue = ((C.phase(z) * 180 / Math.PI) % 360 + 360) % 360;
+      const r = 4 + 13 * magF;
+      ctx.beginPath();
+      ctx.arc(x, y, r + 5, 0, 2 * Math.PI);
+      ctx.fillStyle = "hsla(" + hue + ",90%,60%,0.10)";
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, 2 * Math.PI);
+      ctx.fillStyle = "hsl(" + hue + ",85%," + (28 + 48 * magF) + "%)";
+      ctx.fill();
+      ctx.fillStyle = FAINT;
+      ctx.font = "10px " + "ui-monospace, monospace";
+      ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.fillText(String(k), cx + (R + 26) * Math.cos(ang), cy + (R + 26) * Math.sin(ang));
+    }
+    ctx.fillStyle = DIM;
+    ctx.font = "12px ui-monospace, monospace";
+    ctx.textAlign = "center";
+    ctx.fillText(morph ? "probe → projection recall" : "hue = phase arg(z) · size = |z|", cx, cy);
+  }
+  let raf = null;
+  function frame(now) { draw(now); raf = requestAnimationFrame(frame); }
+  return {
+    start() { if (raf === null) raf = requestAnimationFrame(frame); },
+    stop() { if (raf !== null) { cancelAnimationFrame(raf); raf = null; } }
+  };
+})();
+
+/* ================= VIEW 2 : THE LOOP (yin-yang membranes) ================= */
+const Loop = (() => {
+  const n = 48, omega = 0.06;
+  const ALPHA = 0.30, LAMBDA = 0.25, SIGMA = 0.30, GAMMA = 1.0;
+  const ring = setupCanvas("loopCanvas", 920, 520);
+  const chart = setupCanvas("loopChart", 920, 150);
+  let kappa = 0.45;
+  let t = 0;
+  let phi = [], phiPrev = [], psi = [], psiPrev = []; // yin = phi, yang = psi
+  let damage = false;
+  let running = true;
+  let sinceDestroy = null;
+  const histY = [], histX = [];
+  const HIST_MAX = 320;
+
+  const patYin = (k, tt) => wrapA(2 * Math.PI * k / n - omega * tt);
+  const patYang = (k, tt) => wrapA(-2 * Math.PI * k / n + omega * tt);
+  const maskYin = (k) => (!damage || k % 2 === 0) ? 1 : 0;
+  const maskYang = (k) => (!damage || k % 2 === 1) ? 1 : 0;
+
+  function init() {
+    phi = []; psi = [];
+    for (let k = 0; k < n; k++) {
+      phi.push(wrapA(patYin(k, 0) + gauss() * 0.35));
+      psi.push(wrapA(patYang(k, 0) + gauss() * 0.35));
+    }
+    phiPrev = phi.slice(); psiPrev = psi.slice();
+  }
+  init();
+
+  // drive: mask-weighted mean of e^{i(P-A)} -> {mag, ang}
+  function drive(A, P, maskFn) {
+    let re = 0, im = 0, wsum = 0;
+    for (let k = 0; k < n; k++) {
+      const mk = maskFn(k);
+      if (mk === 0) continue;
+      const d = P[k] - A[k];
+      re += mk * Math.cos(d); im += mk * Math.sin(d); wsum += mk;
+    }
+    if (wsum === 0) return { mag: 0, ang: 0 };
+    re /= wsum; im /= wsum;
+    return { mag: Math.hypot(re, im), ang: Math.atan2(im, re) };
+  }
+  // shape deviation, smoothed over same-parity neighbours with mask weights
+  function deviation(A, P, maskFn) {
+    const { mag, ang } = drive(A, P, maskFn);
+    const dev = new Array(n);
+    for (let k = 0; k < n; k++) dev[k] = wrapA(A[k] - (P[k] + ang));
+    const sm = new Array(n);
+    for (let k = 0; k < n; k++) {
+      const idx = [(k - 2 + n) % n, k, (k + 2) % n], wts = [1, 2, 1];
+      let sre = 0, sim = 0, ws = 0;
+      for (let j = 0; j < 3; j++) {
+        const wgt = wts[j] * maskFn(idx[j]);
+        sre += wgt * Math.cos(dev[idx[j]]);
+        sim += wgt * Math.sin(dev[idx[j]]);
+        ws += wgt;
+      }
+      sm[k] = ws > 0 ? Math.atan2(sim, sre) : dev[k];
+    }
+    return { dev: sm, mag, ang };
+  }
+  function stability(cur, prev) {
+    let re = 0, im = 0;
+    for (let k = 0; k < n; k++) {
+      const d = wrapA(cur[k] - prev[k]);
+      re += Math.cos(d); im += Math.sin(d);
+    }
+    return Math.hypot(re / n, im / n);
+  }
+  function overlap(A, P) {
+    let re = 0, im = 0;
+    for (let k = 0; k < n; k++) {
+      const d = P[k] - A[k];
+      re += Math.cos(d); im += Math.sin(d);
+    }
+    return Math.hypot(re / n, im / n);
+  }
+
+  function tick() {
+    const Py = [], Qx = [], PyN = [], QxN = [];
+    for (let k = 0; k < n; k++) {
+      Py.push(patYin(k, t)); Qx.push(patYang(k, t));
+      PyN.push(patYin(k, t + 1)); QxN.push(patYang(k, t + 1));
+    }
+    const dY = deviation(phi, Py, maskYin);       // yin's own drive + deviation
+    const dX = deviation(psi, Qx, maskYang);      // yang's present deviation (dev_x)
+    // yang predicts yin's next state: one global velocity number
+    let vre = 0, vim = 0;
+    for (let k = 0; k < n; k++) {
+      const d = wrapA(phi[k] - phiPrev[k]);
+      vre += Math.cos(d); vim += Math.sin(d);
+    }
+    const v = Math.atan2(vim / n, vre / n);
+    const predPhi = phi.map(a => wrapA(a + GAMMA * v));
+    const dP = deviation(predPhi, PyN, maskYang); // dev_p, seen through yang's mask
+    const trustYin = dX.mag * dX.mag * stability(psi, psiPrev);
+    const trustYang = dY.mag * dY.mag * stability(phi, phiPrev);
+    const newPhi = new Array(n), newPsi = new Array(n);
+    for (let j = 0; j < n; j++) {
+      // yin update
+      const crossYin = Py[j] - dX.dev[j];
+      let tx = ALPHA * maskYin(j) * dY.mag * Math.cos(Py[j] + dY.ang) + kappa * trustYin * Math.cos(crossYin);
+      let ty = ALPHA * maskYin(j) * dY.mag * Math.sin(Py[j] + dY.ang) + kappa * trustYin * Math.sin(crossYin);
+      let tgt = Math.atan2(ty, tx);
+      newPhi[j] = wrapA(phi[j] + LAMBDA * wrapA(tgt - phi[j]) + gauss() * SIGMA);
+      // yang update
+      const crossYang = QxN[j] - dP.dev[j];
+      tx = ALPHA * maskYang(j) * dX.mag * Math.cos(Qx[j] + dX.ang) + kappa * trustYang * Math.cos(crossYang);
+      ty = ALPHA * maskYang(j) * dX.mag * Math.sin(Qx[j] + dX.ang) + kappa * trustYang * Math.sin(crossYang);
+      tgt = Math.atan2(ty, tx);
+      newPsi[j] = wrapA(psi[j] + LAMBDA * wrapA(tgt - psi[j]) + gauss() * SIGMA);
+    }
+    phiPrev = phi; psiPrev = psi;
+    phi = newPhi; psi = newPsi;
+    t++;
+    if (sinceDestroy !== null) sinceDestroy++;
+    const PyNow = [], QxNow = [];
+    for (let k = 0; k < n; k++) { PyNow.push(patYin(k, t)); QxNow.push(patYang(k, t)); }
+    histY.push(overlap(phi, PyNow));
+    histX.push(overlap(psi, QxNow));
+    if (histY.length > HIST_MAX) { histY.shift(); histX.shift(); }
+  }
+
+  function errHue(err) { // |err| 0 -> cyan (187), pi -> red (0)
+    const f = Math.min(1, Math.abs(err) / Math.PI);
+    return 187 * (1 - f);
+  }
+  function drawRing(ctx, cx, cy, R, A, P, label, labelColor) {
+    ctx.beginPath();
+    ctx.arc(cx, cy, R, 0, 2 * Math.PI);
+    ctx.strokeStyle = LINE; ctx.lineWidth = 1; ctx.stroke();
+    // faint traveling-wave guide: dot at pattern phase position per oscillator
+    ctx.fillStyle = "rgba(113,134,163,0.35)";
+    for (let k = 0; k < n; k++) {
+      const ang = 2 * Math.PI * k / n;
+      const gr = R + 13 * Math.cos(P[k]);
+      ctx.fillRect(cx + gr * Math.cos(ang) - 1, cy + gr * Math.sin(ang) - 1, 2, 2);
+    }
+    for (let k = 0; k < n; k++) {
+      const ang = 2 * Math.PI * k / n;
+      const err = wrapA(A[k] - P[k]);
+      const hue = errHue(err);
+      const lock = 1 - Math.min(1, Math.abs(err) / Math.PI);
+      const x = cx + R * Math.cos(ang), y = cy + R * Math.sin(ang);
+      ctx.beginPath();
+      ctx.arc(x, y, 3 + 3.5 * lock, 0, 2 * Math.PI);
+      ctx.fillStyle = "hsl(" + hue + ",88%," + (30 + 38 * lock) + "%)";
+      ctx.fill();
+    }
+    ctx.fillStyle = labelColor;
+    ctx.font = "12px ui-monospace, monospace";
+    ctx.textAlign = "left";
+    ctx.fillText(label, cx - R, cy - R - 14);
+  }
+  const readout = document.getElementById("loopReadout");
+  function draw() {
+    const { ctx, w, h } = ring;
+    ctx.clearRect(0, 0, w, h);
+    const cx = w / 2, cy = h / 2;
+    const Py = [], Qx = [];
+    for (let k = 0; k < n; k++) { Py.push(patYin(k, t)); Qx.push(patYang(k, t)); }
+    drawRing(ctx, cx, cy, Math.min(w, h) / 2 - 46, psi, Qx, "yang · outer", AMBER);
+    drawRing(ctx, cx, cy, Math.min(w, h) / 2 - 118, phi, Py, "yin · inner", CYAN);
+    ctx.fillStyle = DIM;
+    ctx.font = "12px ui-monospace, monospace";
+    ctx.textAlign = "center";
+    ctx.fillText("tick " + t + " · κ = " + kappa.toFixed(2) + (damage ? " · damaged (yin even k, yang odd k)" : ""), cx, h - 12);
+    // chart
+    const c2 = chart.ctx;
+    c2.clearRect(0, 0, chart.w, chart.h);
+    c2.strokeStyle = LINE;
+    c2.beginPath();
+    for (const gy of [0.25, 0.5, 0.75, 1.0]) {
+      const y = chart.h - 8 - gy * (chart.h - 24);
+      c2.moveTo(30, y); c2.lineTo(chart.w - 6, y);
+    }
+    c2.stroke();
+    c2.fillStyle = FAINT;
+    c2.font = "10px ui-monospace, monospace";
+    c2.textAlign = "right";
+    c2.fillText("1.0", 26, chart.h - 8 - (chart.h - 24) + 3);
+    c2.fillText("0.5", 26, chart.h - 8 - 0.5 * (chart.h - 24) + 3);
+    c2.fillText("0", 26, chart.h - 5);
+    function line(hist, color) {
+      if (hist.length < 2) return;
+      c2.beginPath();
+      hist.forEach((v, i) => {
+        const x = 30 + (chart.w - 40) * i / (HIST_MAX - 1);
+        const y = chart.h - 8 - Math.min(1, v) * (chart.h - 24);
+        if (i === 0) c2.moveTo(x, y); else c2.lineTo(x, y);
+      });
+      c2.strokeStyle = color; c2.lineWidth = 1.4; c2.stroke();
+    }
+    line(histY, CYAN); line(histX, AMBER);
+    const oy = histY.length ? histY[histY.length - 1] : null;
+    const ox = histX.length ? histX[histX.length - 1] : null;
+    readout.innerHTML =
+      "overlap <span class='cy'>yin " + fmt(oy) + "</span> · <span class='am'>yang " + fmt(ox) + "</span>" +
+      " · joint " + fmt(oy !== null && ox !== null ? (oy + ox) / 2 : null) +
+      "\nticks since destruction: " + (sinceDestroy === null ? "— (yang intact)" : sinceDestroy) +
+      (sinceDestroy !== null && ox !== null ? (ox > 0.6 ? "  ·  yang is locking again — resurrected through the loop" : "  ·  yang still scattered — yin is pulling…") : "");
+  }
+
+  const playBtn = document.getElementById("loopPlayBtn");
+  playBtn.addEventListener("click", () => {
+    running = !running;
+    playBtn.textContent = running ? "Pause" : "Play";
+  });
+  const kappaEl = document.getElementById("loopKappa");
+  const kappaVal = document.getElementById("loopKappaVal");
+  kappaEl.addEventListener("input", () => { kappa = Number(kappaEl.value); kappaVal.textContent = kappa.toFixed(2); });
+  const damageBtn = document.getElementById("damageBtn");
+  damageBtn.addEventListener("click", () => {
+    damage = !damage;
+    damageBtn.setAttribute("aria-pressed", String(damage));
+    damageBtn.textContent = damage ? "Damage: ON (amnesia)" : "Damage: complementary amnesia";
+  });
+  document.getElementById("destroyBtn").addEventListener("click", () => {
+    for (let k = 0; k < n; k++) psi[k] = Math.random() * 2 * Math.PI - Math.PI;
+    psiPrev = psi.slice();
+    sinceDestroy = 0;
+  });
+
+  let raf = null, frameCount = 0;
+  function frame() {
+    if (running) { frameCount++; if (frameCount % 2 === 0) tick(); }
+    draw();
+    raf = requestAnimationFrame(frame);
+  }
+  return {
+    start() { if (raf === null) raf = requestAnimationFrame(frame); },
+    stop() { if (raf !== null) { cancelAnimationFrame(raf); raf = null; } }
+  };
+})();
+
+/* ================= VIEW 3 : CRYSTALLIZATION ================= */
+const Crystal = (() => {
+  const N = 8, K = 3, ALPHA = 0.02, SIGMA = 0.25;
+  const S = 1 / Math.sqrt(2);
+  const patterns = [ // Bell states embedded in 8 dims
+    [[S,0],[0,0],[0,0],[S,0],[0,0],[0,0],[0,0],[0,0]],   // Phi+
+    [[S,0],[0,0],[0,0],[-S,0],[0,0],[0,0],[0,0],[0,0]],  // Phi-
+    [[0,0],[S,0],[S,0],[0,0],[0,0],[0,0],[0,0],[0,0]]    // Psi+
+  ];
+  const freqs = [0.6, 0.3, 0.1];
+  const spec = setupCanvas("specCanvas", 920, 190);
+  const trace = setupCanvas("traceCanvas", 920, 200);
+  let W = null; // 8x8 complex matrix, rows of [re,im]
+  let steps = 0, frames = 0, playing = false;
+  let eigen = null; // {vals desc, vecs}
+  const traceS = [], traceF = [];
+  const TRACE_MAX = 300;
+  const readout = document.getElementById("crystalReadout");
+  const whiteVal = document.getElementById("whiteVal");
+  const whiteFill = document.getElementById("whiteFill");
+
+  function zeroW() {
+    return Array.from({ length: N }, () => Array.from({ length: N }, () => [0, 0]));
+  }
+  W = zeroW();
+  function pickPattern() {
+    const r = Math.random();
+    let acc = 0;
+    for (let i = 0; i < K; i++) { acc += freqs[i]; if (r < acc) return i; }
+    return K - 1;
+  }
+  function hebbianStep() {
+    const p = patterns[pickPattern()];
+    let x = p.map(z => [z[0] + gauss() * SIGMA, z[1] + gauss() * SIGMA]);
+    x = vnormalize(x);
+    for (let i = 0; i < N; i++) {
+      for (let j = 0; j < N; j++) {
+        const term = C.mul(x[i], C.conj(x[j]));
+        W[i][j] = [(1 - ALPHA) * W[i][j][0] + ALPHA * term[0],
+                   (1 - ALPHA) * W[i][j][1] + ALPHA * term[1]];
+      }
+    }
+    // symmetrize (Hermitian by construction; this kills float drift)
+    for (let i = 0; i < N; i++) {
+      for (let j = i + 1; j < N; j++) {
+        const a = W[i][j], b = W[j][i];
+        const re = (a[0] + b[0]) / 2, im = (a[1] - b[1]) / 2;
+        W[i][j] = [re, im]; W[j][i] = [re, -im];
+      }
+      W[i][i] = [W[i][i][0], 0];
+    }
+    steps++;
+  }
+  function matVec(M, v) {
+    const out = [];
+    for (let i = 0; i < N; i++) {
+      let acc = [0, 0];
+      for (let j = 0; j < N; j++) acc = C.add(acc, C.mul(M[i][j], v[j]));
+      out.push(acc);
+    }
+    return out;
+  }
+  function eigendecompose() {
+    // power iteration with deflation on a working copy of W
+    const M = W.map(row => row.map(z => [z[0], z[1]]));
+    const vals = [], vecs = [];
+    for (let e = 0; e < N; e++) {
+      const rng = mulberry32(1000 + e), g = makeGauss(rng);
+      let v = [];
+      for (let i = 0; i < N; i++) v.push([g(), g()]);
+      v = vnormalize(v);
+      for (let it = 0; it < 90; it++) {
+        v = matVec(M, v);
+        for (const u of vecs) { // orthogonalize against found vectors
+          const c = inner(u, v);
+          v = v.map((z, k) => C.sub(z, C.mul(c, u[k])));
+        }
+        const nrm = vnorm(v);
+        if (nrm < 1e-13) { v = v.map(() => [0, 0]); v[e] = [1, 0]; break; }
+        v = v.map(z => [z[0] / nrm, z[1] / nrm]);
+      }
+      const Mv = matVec(M, v);
+      const lam = inner(v, Mv)[0];
+      vals.push(lam); vecs.push(v);
+      for (let i = 0; i < N; i++)          // deflate: M -= lam * v v^dagger
+        for (let j = 0; j < N; j++) {
+          const term = C.scale(C.mul(v[i], C.conj(v[j])), lam);
+          M[i][j] = C.sub(M[i][j], term);
+        }
+    }
+    const order = vals.map((v, i) => i).sort((a, b) => vals[b] - vals[a]);
+    return { vals: order.map(i => vals[i]), vecs: order.map(i => vecs[i]) };
+  }
+  function metrics() {
+    const vals = eigen.vals.map(v => Math.max(0, v));
+    const tr = vals.reduce((a, b) => a + b, 0);
+    let S = 0;
+    if (tr > 1e-12) for (const v of vals) { const p = v / tr; if (p > 1e-12) S -= p * Math.log(p); }
+    let fid = 0;
+    for (const p of patterns) {
+      let s = 0;
+      for (let i = 0; i < K; i++) { const c = inner(eigen.vecs[i], p); s += c[0] * c[0] + c[1] * c[1]; }
+      fid += s / K;
+    }
+    const res = vals.slice(K);
+    const rtr = res.reduce((a, b) => a + b, 0);
+    let white = 0;
+    if (rtr > 1e-12) {
+      let Sr = 0;
+      for (const v of res) { const p = v / rtr; if (p > 1e-12) Sr -= p * Math.log(p); }
+      white = Sr / Math.log(N - K);
+    }
+    return { S, fid, white, tr };
+  }
+  function drawSpec() {
+    const { ctx, w, h } = spec;
+    ctx.clearRect(0, 0, w, h);
+    const vals = eigen ? eigen.vals : new Array(N).fill(0);
+    const maxV = Math.max(1e-9, ...vals.map(v => Math.max(0, v)));
+    const base = h - 30, top = 12;
+    const bw = (w - 80) / N;
+    ctx.strokeStyle = LINE;
+    ctx.beginPath(); ctx.moveTo(40, base); ctx.lineTo(w - 10, base); ctx.stroke();
+    for (let i = 0; i < N; i++) {
+      const v = Math.max(0, vals[i]);
+      const bh = Math.sqrt(v / maxV) * (base - top);
+      const x = 40 + i * bw + bw * 0.18, wid = bw * 0.64;
+      ctx.fillStyle = i < K ? CYAN : "rgba(113,134,163,0.45)";
+      ctx.fillRect(x, base - bh, wid, bh);
+      ctx.fillStyle = DIM;
+      ctx.font = "11px ui-monospace, monospace";
+      ctx.textAlign = "center";
+      ctx.fillText("λ" + (i + 1), x + wid / 2, base + 16);
+      if (base - bh - 6 < 14) { // bar nearly full height: label inside the bar
+        ctx.fillStyle = i < K ? "#04121a" : INK;
+        ctx.fillText(v.toFixed(3), x + wid / 2, base - bh + 15);
+      } else {
+        ctx.fillStyle = i < K ? CYAN : DIM;
+        ctx.fillText(v.toFixed(3), x + wid / 2, base - bh - 6);
+      }
+    }
+  }
+  function drawTrace() {
+    const { ctx, w, h } = trace;
+    ctx.clearRect(0, 0, w, h);
+    ctx.strokeStyle = LINE;
+    ctx.beginPath();
+    for (const gy of [0.25, 0.5, 0.75, 1.0]) {
+      const y = h - 10 - gy * (h - 24);
+      ctx.moveTo(34, y); ctx.lineTo(w - 8, y);
+    }
+    ctx.stroke();
+    ctx.fillStyle = FAINT;
+    ctx.font = "10px ui-monospace, monospace";
+    ctx.textAlign = "right";
+    ctx.fillText("1", 30, h - 10 - (h - 24) + 3);
+    ctx.fillText("0", 30, h - 7);
+    function line(arr, norm, color) {
+      if (arr.length < 2) return;
+      ctx.beginPath();
+      arr.forEach((v, i) => {
+        const x = 34 + (w - 46) * i / (TRACE_MAX - 1);
+        const y = h - 10 - Math.min(1, v / norm) * (h - 24);
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      });
+      ctx.strokeStyle = color; ctx.lineWidth = 1.4; ctx.stroke();
+    }
+    line(traceF, 1, CYAN);
+    line(traceS, Math.log(N), AMBER);
+  }
+  function refresh() {
+    eigen = eigendecompose();
+    const m = metrics();
+    traceS.push(m.S); traceF.push(m.fid);
+    if (traceS.length > TRACE_MAX) { traceS.shift(); traceF.shift(); }
+    drawSpec(); drawTrace();
+    whiteVal.textContent = m.white.toFixed(3);
+    whiteFill.style.width = (m.white * 100).toFixed(1) + "%";
+    readout.innerHTML =
+      "steps " + steps + "  ·  Tr(W) = " + fmt(m.tr) + "\n" +
+      "spectrum entropy S = " + fmt(m.S) + "  (max log 8 = " + Math.log(8).toFixed(3) + ")\n" +
+      "subspace fidelity = <span class='cy'>" + fmt(m.fid) + "</span>  ·  residue whiteness = <span class='am'>" + fmt(m.white) + "</span>";
+  }
+  drawSpec(); drawTrace();
+  const playBtn = document.getElementById("crystalPlayBtn");
+  playBtn.addEventListener("click", () => {
+    playing = !playing;
+    playBtn.textContent = playing ? "Pause" : "Play";
+  });
+  document.getElementById("crystalResetBtn").addEventListener("click", () => {
+    W = zeroW(); steps = 0; frames = 0; eigen = null;
+    traceS.length = 0; traceF.length = 0;
+    drawSpec(); drawTrace();
+    whiteVal.textContent = "0.000"; whiteFill.style.width = "0%";
+    readout.textContent = "W reset to zero. Press play to start the stream.";
+  });
+  let raf = null;
+  function frame() {
+    if (playing) {
+      for (let s = 0; s < 20; s++) hebbianStep();
+      frames++;
+      if (frames % 10 === 0) refresh();
+    }
+    raf = requestAnimationFrame(frame);
+  }
+  return {
+    start() { if (raf === null) raf = requestAnimationFrame(frame); },
+    stop() { if (raf !== null) { cancelAnimationFrame(raf); raf = null; } }
+  };
+})();
+
+/* ================= VIEW 4 : THE GATE ================= */
+const Gate = (() => {
+  const N = 8;
+  const SQ2 = 1 / Math.sqrt(2), SQ3 = 1 / Math.sqrt(3), SQ8 = 1 / Math.sqrt(8);
+  const Z = () => [0, 0];
+  const lib = [
+    { name: "GHZ", v: [[SQ2,0],Z(),Z(),Z(),Z(),Z(),Z(),[SQ2,0]] },
+    { name: "W", v: [Z(),[SQ3,0],[SQ3,0],Z(),[SQ3,0],Z(),Z(),Z()] },
+    { name: "|000⟩", v: [[1,0],Z(),Z(),Z(),Z(),Z(),Z(),Z()] },
+    { name: "|+++⟩", v: Array.from({ length: N }, () => [SQ8, 0]) }
+  ];
+  const jc = setupCanvas("jCanvas", 920, 210);
+  const strip = setupCanvas("stripCanvas", 920, 180);
+  const readout = document.getElementById("gateReadout");
+  const streamBtn = document.getElementById("gateStreamBtn");
+  const sigmaEl = document.getElementById("gateSigma");
+  const sigmaVal = document.getElementById("gateSigmaVal");
+  sigmaEl.addEventListener("input", () => { sigmaVal.textContent = Number(sigmaEl.value).toFixed(2); });
+
+  let tau = null;
+  let streaming = false, timer = null;
+  const dots = []; // {score, accepted, y}
+  let inTot = 0, inAcc = 0, oodTot = 0, oodRej = 0, accTot = 0, accCorrect = 0;
+
+  function maxOverlap(x) {
+    let best = 0, bi = 0;
+    lib.forEach((p, i) => {
+      const m = C.abs(inner(p.v, x));
+      if (m > best) { best = m; bi = i; }
+    });
+    return { score: best, idx: bi };
+  }
+  function noisyPattern(i, sigma) {
+    const x = lib[i].v.map(z => [z[0] + gauss() * sigma, z[1] + gauss() * sigma]);
+    return vnormalize(x);
+  }
+  function randomState() {
+    const x = [];
+    for (let k = 0; k < N; k++) x.push([gauss(), gauss()]);
+    return vnormalize(x);
+  }
+  function drawJ(curve, bestTau, bestJ) {
+    const { ctx, w, h } = jc;
+    ctx.clearRect(0, 0, w, h);
+    const x0 = 44, x1 = w - 14, y0 = h - 26, y1 = 14;
+    ctx.strokeStyle = LINE;
+    ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y0); ctx.moveTo(x0, y0); ctx.lineTo(x0, y1); ctx.stroke();
+    ctx.fillStyle = FAINT;
+    ctx.font = "10px ui-monospace, monospace";
+    ctx.textAlign = "center";
+    for (let gx = 0; gx <= 1.0001; gx += 0.25) {
+      const x = x0 + gx * (x1 - x0);
+      ctx.fillText(gx.toFixed(2), x, y0 + 15);
+    }
+    ctx.textAlign = "right";
+    ctx.fillText("J=1", x0 - 5, y1 + 3);
+    ctx.fillText("J=0", x0 - 5, y0 + 3);
+    if (!curve) {
+      ctx.fillStyle = DIM;
+      ctx.font = "12px ui-monospace, monospace";
+      ctx.textAlign = "center";
+      ctx.fillText("not calibrated yet", (x0 + x1) / 2, (y0 + y1) / 2);
+      return;
+    }
+    ctx.beginPath();
+    curve.forEach((pt, i) => {
+      const x = x0 + pt.tau * (x1 - x0);
+      const y = y0 - Math.max(0, pt.J) * (y0 - y1);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    });
+    ctx.strokeStyle = CYAN; ctx.lineWidth = 1.6; ctx.stroke();
+    const bx = x0 + bestTau * (x1 - x0);
+    const by = y0 - Math.max(0, bestJ) * (y0 - y1);
+    ctx.strokeStyle = AMBER;
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.moveTo(bx, y0); ctx.lineTo(bx, by); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.beginPath(); ctx.arc(bx, by, 4.5, 0, 2 * Math.PI);
+    ctx.fillStyle = AMBER; ctx.fill();
+  }
+  function drawStrip() {
+    const { ctx, w, h } = strip;
+    ctx.clearRect(0, 0, w, h);
+    const x0 = 34, x1 = w - 12, y0 = h - 22;
+    ctx.strokeStyle = LINE;
+    ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y0); ctx.stroke();
+    ctx.fillStyle = FAINT;
+    ctx.font = "10px ui-monospace, monospace";
+    ctx.textAlign = "center";
+    for (let gx = 0; gx <= 1.0001; gx += 0.25) ctx.fillText(gx.toFixed(2), x0 + gx * (x1 - x0), y0 + 14);
+    if (tau !== null) {
+      const tx = x0 + tau * (x1 - x0);
+      ctx.strokeStyle = AMBER; ctx.lineWidth = 1.4;
+      ctx.beginPath(); ctx.moveTo(tx, 10); ctx.lineTo(tx, y0); ctx.stroke();
+      ctx.fillStyle = AMBER;
+      ctx.textAlign = "center";
+      ctx.fillText("τ = " + tau.toFixed(2), tx, y0 + 14);
+    }
+    for (const d of dots) {
+      const x = x0 + d.score * (x1 - x0);
+      ctx.beginPath();
+      ctx.arc(x, d.y, 3.4, 0, 2 * Math.PI);
+      ctx.fillStyle = d.accepted ? "rgba(61,220,132,0.85)" : "rgba(255,90,90,0.85)";
+      ctx.fill();
+    }
+    if (dots.length === 0) {
+      ctx.fillStyle = DIM;
+      ctx.font = "12px ui-monospace, monospace";
+      ctx.textAlign = "center";
+      ctx.fillText(tau === null ? "calibrate, then stream probes" : "stream probes to fill the strip", (x0 + x1) / 2, h / 2);
+    }
+  }
+  function tallyText() {
+    const accIn = inTot ? (inAcc / inTot) : null;
+    const rejOod = oodTot ? (oodRej / oodTot) : null;
+    const accAcc = accTot ? (accCorrect / accTot) : null;
+    readout.innerHTML =
+      "τ = <span class='am'>" + (tau === null ? "—" : tau.toFixed(3)) + "</span> (frozen after calibration)  ·  stream σ = " + Number(sigmaEl.value).toFixed(2) + "\n" +
+      "accept-in-library <span class='cy'>" + (accIn === null ? "—" : (accIn * 100).toFixed(1) + "%") + "</span> (" + inAcc + "/" + inTot + ")" +
+      "  ·  reject-OOD <span class='cy'>" + (rejOod === null ? "—" : (rejOod * 100).toFixed(1) + "%") + "</span> (" + oodRej + "/" + oodTot + ")" +
+      "  ·  accuracy-on-accepted <span class='cy'>" + (accAcc === null ? "—" : accAcc.toFixed(3)) + "</span> (" + accCorrect + "/" + accTot + ")";
+  }
+  document.getElementById("calibBtn").addEventListener("click", () => {
+    const inScores = [], oodScores = [];
+    for (let i = 0; i < 100; i++) inScores.push(maxOverlap(noisyPattern(Math.floor(Math.random() * lib.length), 0.25)).score);
+    for (let i = 0; i < 100; i++) oodScores.push(maxOverlap(randomState()).score);
+    const curve = [];
+    let bestTau = 0, bestJ = -Infinity;
+    for (let ti = 0; ti <= 100; ti++) {
+      const th = ti / 100;
+      let tp = 0, fp = 0;
+      for (const s of inScores) if (s >= th) tp++;
+      for (const s of oodScores) if (s >= th) fp++;
+      const J = tp / inScores.length - fp / oodScores.length;
+      curve.push({ tau: th, J });
+      if (J > bestJ) { bestJ = J; bestTau = th; }
+    }
+    tau = bestTau;
+    drawJ(curve, bestTau, bestJ);
+    streamBtn.disabled = false;
+    readout.innerHTML = "Calibrated on 200 fresh probes (σ = 0.25): τ frozen at <span class='am'>" + tau.toFixed(3) + "</span>, Youden's J = " + bestJ.toFixed(3) + ".\nNow stream probes — try raising σ to feel the shift.";
+    drawStrip();
+  });
+  function sendStreamProbe() {
+    if (tau === null) return;
+    const sigma = Number(sigmaEl.value);
+    const isIn = Math.random() < 0.5;
+    let x, truth = -1;
+    if (isIn) { truth = Math.floor(Math.random() * lib.length); x = noisyPattern(truth, sigma); }
+    else x = randomState();
+    const { score, idx } = maxOverlap(x);
+    const accepted = score >= tau;
+    dots.push({ score, accepted, y: 16 + Math.random() * (strip.h - 46) });
+    if (dots.length > 160) dots.shift();
+    if (isIn) { inTot++; if (accepted) inAcc++; } else { oodTot++; if (!accepted) oodRej++; }
+    if (accepted) { accTot++; if (isIn && idx === truth) accCorrect++; }
+    drawStrip();
+    tallyText();
+  }
+  streamBtn.addEventListener("click", () => {
+    streaming = !streaming;
+    streamBtn.setAttribute("aria-pressed", String(streaming));
+    streamBtn.textContent = streaming ? "Streaming…" : "Stream probes";
+    if (streaming) { sendStreamProbe(); timer = setInterval(sendStreamProbe, 320); }
+    else if (timer) { clearInterval(timer); timer = null; }
+  });
+  drawJ(null, 0, 0);
+  drawStrip();
+  return {
+    start() {},
+    stop() {
+      if (streaming) streamBtn.click();
+    }
+  };
+})();
+
+/* ================= tabs ================= */
+const views = { field: Field, loop: Loop, crystal: Crystal, gate: Gate };
+let activeView = "field";
+document.querySelectorAll("nav.tabs button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const name = btn.getAttribute("data-view");
+    if (name === activeView) return;
+    views[activeView].stop();
+    document.getElementById("view-" + activeView).hidden = true;
+    document.getElementById("tab-" + activeView).setAttribute("aria-selected", "false");
+    activeView = name;
+    document.getElementById("view-" + activeView).hidden = false;
+    document.getElementById("tab-" + activeView).setAttribute("aria-selected", "true");
+    views[activeView].start();
+  });
+});
+Field.start();
+</script>
+  </body>
+</html>

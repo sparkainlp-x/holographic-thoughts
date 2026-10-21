@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: Holographic Thoughts
+version: 0.1.0
+date-released: 2026-10-21
+authors:
+  - family-names: Brisson
+    given-names: Jean-François
+    orcid: "https://orcid.org/0009-0000-9778-5374"
+license: AGPL-3.0-only
+repository-code: "https://github.com/sparkainlp-x/holographic-thoughts"
+url: "https://sparkainlp-x.github.io/holographic-thoughts/"
+abstract: >-
+  Self-contained interactive web page with four toy views of
+  holographic-membrane models (projection recall, coupled loop,
+  Hebbian crystallization, calibrated refusal gate). Synthetic toy,
+  classical simulation; not physical holography or quantum hardware.
+keywords: [holographic-memory, interactive-demo, visualization, reproducible-research]
