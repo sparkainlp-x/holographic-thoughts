@@ -9,7 +9,7 @@ A single self-contained HTML page (no external dependencies, works offline) with
 | View | Python reference model |
 |---|---|
 | Field (projection recall) | [quantum-projection](https://github.com/sparkainlp-x/quantum-projection) |
-| Loop (coupled membranes) | none published yet: illustrative only |
+| Loop (coupled membranes) | [yin-yang-membranes](https://github.com/sparkainlp-x/yin-yang-membranes) (negative result) |
 | Crystallization | [membrane-crystallization](https://github.com/sparkainlp-x/membrane-crystallization) |
 | Refusal gate | [refusing-membrane](https://github.com/sparkainlp-x/refusing-membrane) |
 

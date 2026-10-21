@@ -324,7 +324,7 @@
           <button class="act primary" id="probeBtn">Send probe</button>
           <button class="act" id="streamBtn" aria-pressed="false">Auto-stream</button>
         </div>
-        <p class="honesty">Live toy simulation in your browser — see the Python models (membrane-crystallization, refusing-membrane, quantum-projection) for the measured numbers. <span class="ref">Recall here is one-shot projection onto the stored patterns — the same operation the Python quantum-projection model measures.</span></p>
+        <p class="honesty">Live toy simulation in your browser — see the Python models (yin-yang-membranes, membrane-crystallization, refusing-membrane, quantum-projection) for the measured numbers. <span class="ref">Recall here is one-shot projection onto the stored patterns — the same operation the Python quantum-projection model measures.</span></p>
       </section>
 
       <!-- ============ VIEW 2 : THE LOOP ============ -->
@@ -350,7 +350,7 @@
           <button class="act danger" id="destroyBtn">Destroy yang</button>
         </div>
         <div class="readout" id="loopReadout">overlap yin — · yang — · ticks since destruction —</div>
-        <p class="honesty">Live toy simulation in your browser — see the Python models (membrane-crystallization, refusing-membrane, quantum-projection) for the measured numbers. <span class="ref">No published Python reference model for this view yet; the coupled-loop behaviour shown here is illustrative only and has not been measured.</span></p>
+        <p class="honesty">Live toy simulation in your browser — see the Python models (yin-yang-membranes, membrane-crystallization, refusing-membrane, quantum-projection) for the measured numbers. <span class="ref">Python reference (<a href="https://github.com/sparkainlp-x/yin-yang-membranes">yin-yang-membranes</a>, seeds 7/21/42): at κ = 0.45 coupling <b>lowers</b> joint overlap, 0.78–0.79 vs 0.90 alone (intact) and 0.45–0.46 vs 0.72 alone (amnesia); a destroyed yang relocks in 2–3 ticks coupled and 2–4 alone, and under amnesia coupling slows recovery (58–658 ticks vs 4–9 alone; one alone run did not recover). A negative result.</span></p>
       </section>
 
       <!-- ============ VIEW 3 : CRYSTALLIZATION ============ -->
@@ -383,7 +383,7 @@
           <button class="act primary" id="crystalPlayBtn">Play</button>
           <button class="act" id="crystalResetBtn">Reset W</button>
         </div>
-        <p class="honesty">Live toy simulation in your browser — see the Python models (membrane-crystallization, refusing-membrane, quantum-projection) for the measured numbers. <span class="ref">Python reference (membrane-crystallization, σ 0.25): subspace fidelity 0.96–0.97; residue whiteness 0.993 (not discriminative: pure noise scores 0.995); self-recreation match fidelity 0.953 → 0.798 from generation 1 to 5.</span></p>
+        <p class="honesty">Live toy simulation in your browser — see the Python models (yin-yang-membranes, membrane-crystallization, refusing-membrane, quantum-projection) for the measured numbers. <span class="ref">Python reference (membrane-crystallization, σ 0.25): subspace fidelity 0.96–0.97; residue whiteness 0.993 (not discriminative: pure noise scores 0.995); self-recreation match fidelity 0.953 → 0.798 from generation 1 to 5.</span></p>
       </section>
 
       <!-- ============ VIEW 4 : THE GATE ============ -->
@@ -404,13 +404,13 @@
           <label>stream σ <input type="range" id="gateSigma" min="0" max="0.8" step="0.01" value="0.25" /><span class="val" id="gateSigmaVal">0.25</span></label>
         </div>
         <div class="readout" id="gateReadout">No τ yet — calibrate first. The gate refuses to guess a threshold.</div>
-        <p class="honesty">Live toy simulation in your browser — see the Python models (membrane-crystallization, refusing-membrane, quantum-projection) for the measured numbers. <span class="ref">Python reference (refusing-membrane): τ = 0.700, accuracy-on-accepted 0.995; under distribution shift (σ 0.25 → 0.50) it caught 75.6% of new errors.</span></p>
+        <p class="honesty">Live toy simulation in your browser — see the Python models (yin-yang-membranes, membrane-crystallization, refusing-membrane, quantum-projection) for the measured numbers. <span class="ref">Python reference (refusing-membrane): τ = 0.700, accuracy-on-accepted 0.995; under distribution shift (σ 0.25 → 0.50) it caught 75.6% of new errors.</span></p>
       </section>
 
       <footer class="page">
         All four views run the actual mathematics in your browser — complex projection, the predictive cross-coupling, Hebbian updates with live eigendecomposition, and a calibrated refusal threshold. Toy scale (N ≤ 48); the measured numbers live in the Python models.
         <br /><br />
-        Synthetic toy, classical simulation — not physical holography or quantum hardware. Author: Jean-François Brisson · ORCID <a href="https://orcid.org/0009-0000-9778-5374">0009-0000-9778-5374</a> · Models: <a href="https://github.com/sparkainlp-x/membrane-crystallization">membrane-crystallization</a> · <a href="https://github.com/sparkainlp-x/refusing-membrane">refusing-membrane</a> · <a href="https://github.com/sparkainlp-x/quantum-projection">quantum-projection</a> · Source: <a href="https://github.com/sparkainlp-x/holographic-thoughts">holographic-thoughts</a> · Licence: <a href="https://github.com/sparkainlp-x/holographic-thoughts/blob/main/LICENSE">AGPL-3.0-only</a>
+        Synthetic toy, classical simulation — not physical holography or quantum hardware. Author: Jean-François Brisson · ORCID <a href="https://orcid.org/0009-0000-9778-5374">0009-0000-9778-5374</a> · Models: <a href="https://github.com/sparkainlp-x/yin-yang-membranes">yin-yang-membranes</a> · <a href="https://github.com/sparkainlp-x/membrane-crystallization">membrane-crystallization</a> · <a href="https://github.com/sparkainlp-x/refusing-membrane">refusing-membrane</a> · <a href="https://github.com/sparkainlp-x/quantum-projection">quantum-projection</a> · Source: <a href="https://github.com/sparkainlp-x/holographic-thoughts">holographic-thoughts</a> · Licence: <a href="https://github.com/sparkainlp-x/holographic-thoughts/blob/main/LICENSE">AGPL-3.0-only</a>
       </footer>
     </div>
 
