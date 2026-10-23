@@ -1,7 +1,7 @@
 {
   "upload_type": "software",
   "title": "Holographic Thoughts",
-  "description": "Self-contained interactive web page with four toy views of holographic-membrane models (projection recall, coupled loop, Hebbian crystallization, calibrated refusal gate). Synthetic toy, classical simulation; not physical holography or quantum hardware.",
+  "description": "Self-contained interactive web page with five toy views of holographic-membrane models (projection recall, coupled loop, Hebbian crystallization, calibrated refusal gate, outer-product capacity). Synthetic toy, classical simulation; not physical holography or quantum hardware.",
   "creators": [{"name": "Brisson, Jean-François", "orcid": "0009-0000-9778-5374"}],
   "license": "AGPL-3.0-only",
   "version": "0.1.0",

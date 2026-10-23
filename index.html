@@ -292,7 +292,7 @@
     <div class="wrap">
       <header class="thesis">
         <p>Holographic thoughts, made visible — <span class="accent">every pixel computed, nothing canned.</span></p>
-        <p class="sub">Four live simulations of the membrane models: projection recall, the yin–yang predictive loop, Hebbian crystallization, and the refusing gate. Phase is hue; magnitude is brightness.</p>
+        <p class="sub">Five live simulations of the membrane models: projection recall, the yin–yang predictive loop, Hebbian crystallization, the refusing gate, and the capacity limit where the record shatters. Phase is hue; magnitude is brightness.</p>
       </header>
 
       <nav class="tabs" role="tablist" aria-label="Views">
@@ -300,6 +300,7 @@
         <button role="tab" id="tab-loop" aria-selected="false" aria-controls="view-loop" data-view="loop"><span class="n">02</span>The Loop</button>
         <button role="tab" id="tab-crystal" aria-selected="false" aria-controls="view-crystal" data-view="crystal"><span class="n">03</span>Crystallization</button>
         <button role="tab" id="tab-gate" aria-selected="false" aria-controls="view-gate" data-view="gate"><span class="n">04</span>The Gate</button>
+        <button role="tab" id="tab-shatter" aria-selected="false" aria-controls="view-shatter" data-view="shatter"><span class="n">05</span>The Shatterpoint</button>
       </nav>
 
       <!-- ============ VIEW 1 : THE THOUGHT FIELD ============ -->
@@ -324,7 +325,7 @@
           <button class="act primary" id="probeBtn">Send probe</button>
           <button class="act" id="streamBtn" aria-pressed="false">Auto-stream</button>
         </div>
-        <p class="honesty">Live toy simulation in your browser — see the Python models (yin-yang-membranes, membrane-crystallization, refusing-membrane, quantum-projection) for the measured numbers. <span class="ref">Recall here is one-shot projection onto the stored patterns — the same operation the Python quantum-projection model measures.</span></p>
+        <p class="honesty">Live toy simulation in your browser — see the Python models (yin-yang-membranes, membrane-crystallization, refusing-membrane, quantum-projection, membrane-capacity) for the measured numbers. <span class="ref">Recall here is one-shot projection onto the stored patterns — the same operation the Python quantum-projection model measures.</span></p>
       </section>
 
       <!-- ============ VIEW 2 : THE LOOP ============ -->
@@ -350,7 +351,7 @@
           <button class="act danger" id="destroyBtn">Destroy yang</button>
         </div>
         <div class="readout" id="loopReadout">overlap yin — · yang — · ticks since destruction —</div>
-        <p class="honesty">Live toy simulation in your browser — see the Python models (yin-yang-membranes, membrane-crystallization, refusing-membrane, quantum-projection) for the measured numbers. <span class="ref">Python reference (<a href="https://github.com/sparkainlp-x/yin-yang-membranes">yin-yang-membranes</a>, seeds 7/21/42): at κ = 0.45 coupling <b>lowers</b> joint overlap, 0.78–0.79 vs 0.90 alone (intact) and 0.45–0.46 vs 0.72 alone (amnesia); a destroyed yang relocks in 2–3 ticks coupled and 2–4 alone, and under amnesia coupling slows recovery (58–658 ticks vs 4–9 alone; one alone run did not recover). A negative result.</span></p>
+        <p class="honesty">Live toy simulation in your browser — see the Python models (yin-yang-membranes, membrane-crystallization, refusing-membrane, quantum-projection, membrane-capacity) for the measured numbers. <span class="ref">Python reference (<a href="https://github.com/sparkainlp-x/yin-yang-membranes">yin-yang-membranes</a>, seeds 7/21/42): at κ = 0.45 coupling <b>lowers</b> joint overlap, 0.78–0.79 vs 0.90 alone (intact) and 0.45–0.46 vs 0.72 alone (amnesia); a destroyed yang relocks in 2–3 ticks coupled and 2–4 alone, and under amnesia coupling slows recovery (58–658 ticks vs 4–9 alone; one alone run did not recover). A negative result.</span></p>
       </section>
 
       <!-- ============ VIEW 3 : CRYSTALLIZATION ============ -->
@@ -383,7 +384,7 @@
           <button class="act primary" id="crystalPlayBtn">Play</button>
           <button class="act" id="crystalResetBtn">Reset W</button>
         </div>
-        <p class="honesty">Live toy simulation in your browser — see the Python models (yin-yang-membranes, membrane-crystallization, refusing-membrane, quantum-projection) for the measured numbers. <span class="ref">Python reference (membrane-crystallization, σ 0.25): subspace fidelity 0.96–0.97; residue whiteness 0.993 (not discriminative: pure noise scores 0.995); self-recreation match fidelity 0.953 → 0.798 from generation 1 to 5.</span></p>
+        <p class="honesty">Live toy simulation in your browser — see the Python models (yin-yang-membranes, membrane-crystallization, refusing-membrane, quantum-projection, membrane-capacity) for the measured numbers. <span class="ref">Python reference (membrane-crystallization, σ 0.25): subspace fidelity 0.96–0.97; residue whiteness 0.993 (not discriminative: pure noise scores 0.995); self-recreation match fidelity 0.953 → 0.798 from generation 1 to 5.</span></p>
       </section>
 
       <!-- ============ VIEW 4 : THE GATE ============ -->
@@ -404,13 +405,50 @@
           <label>stream σ <input type="range" id="gateSigma" min="0" max="0.8" step="0.01" value="0.25" /><span class="val" id="gateSigmaVal">0.25</span></label>
         </div>
         <div class="readout" id="gateReadout">No τ yet — calibrate first. The gate refuses to guess a threshold.</div>
-        <p class="honesty">Live toy simulation in your browser — see the Python models (yin-yang-membranes, membrane-crystallization, refusing-membrane, quantum-projection) for the measured numbers. <span class="ref">Python reference (refusing-membrane): τ = 0.700, accuracy-on-accepted 0.995; under distribution shift (σ 0.25 → 0.50) it caught 75.6% of new errors.</span></p>
+        <p class="honesty">Live toy simulation in your browser — see the Python models (yin-yang-membranes, membrane-crystallization, refusing-membrane, quantum-projection, membrane-capacity) for the measured numbers. <span class="ref">Python reference (refusing-membrane): τ = 0.700, accuracy-on-accepted 0.995; under distribution shift (σ 0.25 → 0.50) it caught 75.6% of new errors.</span></p>
+      </section>
+
+
+      <!-- ============ VIEW 5 : THE SHATTERPOINT ============ -->
+      <section class="view" id="view-shatter" role="tabpanel" aria-labelledby="tab-shatter" hidden>
+        <div class="view-head">
+          <h2>The Shatterpoint — how much can one hologram hold?</h2>
+          <p>One membrane of <b>N = 64</b> complex oscillators stores <b>P</b> random patterns by the outer-product rule W = Σ|p⟩⟨p|. A noisy probe is recalled by the multiply itself: <b>y = W · probe</b>, then classified by argmax |⟨p<sub>i</sub>|y⟩|. Crosstalk between random patterns sets a floor (~1/√N); noise and load push accuracy over the edge. Watch the 8×8 grid morph from probe to recall, then sweep P until the record shatters.</p>
+        </div>
+        <div class="split">
+          <div class="stage">
+            <canvas class="plot" id="shatterCanvas" width="560" height="560" aria-label="8 by 8 grid of complex amplitudes, hue is phase, brightness is magnitude"></canvas>
+            <div class="legend">
+              <span>cell hue = phase · brightness = |z|</span>
+              <span><span class="sw" style="background:var(--cyan)"></span>probe → recall morph</span>
+            </div>
+            <div class="chart-label">ACCURACY vs P — one-shot classification after W·probe</div>
+            <canvas class="plot" id="shatterChart" width="920" height="160" aria-label="Accuracy versus number of stored patterns"></canvas>
+          </div>
+          <aside class="panel">
+            <h3>Load · P / N</h3>
+            <div class="meter">
+              <div class="meter-top"><span>stored patterns / oscillators</span><span class="val" id="shatterLoadVal">12 / 64 = 0.19</span></div>
+              <div class="meter-track"><div class="meter-fill" id="shatterLoadFill" style="width:19%"></div></div>
+            </div>
+            <div class="readout" id="shatterReadout">Store patterns, then send a probe. Accuracy is measured, not assumed.</div>
+            <div class="tally" id="shatterTally">session — probes 0 · correct 0 · accuracy —</div>
+          </aside>
+        </div>
+        <div class="controls">
+          <label>P <input type="range" id="shatterP" min="1" max="192" step="1" value="12" /><span class="val" id="shatterPVal">12</span></label>
+          <label>σ <input type="range" id="shatterSigma" min="0" max="0.6" step="0.01" value="0.20" /><span class="val" id="shatterSigmaVal">0.20</span></label>
+          <button class="act primary" id="shatterProbeBtn">Send probe</button>
+          <button class="act" id="shatterSweepBtn">Run capacity sweep</button>
+          <button class="act danger" id="shatterBreakBtn">Push it until it breaks</button>
+        </div>
+        <p class="honesty">Live toy simulation in your browser — the record here is a true outer-product hologram and recall is the multiply itself, the same operation <a href="https://github.com/sparkainlp-x/membrane-capacity">membrane-capacity</a> measures. <span class="ref">Python reference (<a href="https://github.com/sparkainlp-x/membrane-capacity">membrane-capacity</a>): crosstalk floor for N=64 is 0.1102 vs theory √(π/4N)=0.1108 (0.5% off); at σ=0.15 classification accuracy held at 1.000 out to P=1024; at σ=0.30 P90=4 (grid coarseness: true P90 between 4 and 8). Capacity is bought with quiet, not size.</span></p>
       </section>
 
       <footer class="page">
-        All four views run the actual mathematics in your browser — complex projection, the predictive cross-coupling, Hebbian updates with live eigendecomposition, and a calibrated refusal threshold. Toy scale (N ≤ 48); the measured numbers live in the Python models.
+        All five views run the actual mathematics in your browser — complex projection, the predictive cross-coupling, Hebbian updates with live eigendecomposition, a calibrated refusal threshold, and outer-product capacity. Toy scale (N ≤ 64); the measured numbers live in the Python models.
         <br /><br />
-        Synthetic toy, classical simulation — not physical holography or quantum hardware. Author: Jean-François Brisson · ORCID <a href="https://orcid.org/0009-0000-9778-5374">0009-0000-9778-5374</a> · Models: <a href="https://github.com/sparkainlp-x/yin-yang-membranes">yin-yang-membranes</a> · <a href="https://github.com/sparkainlp-x/membrane-crystallization">membrane-crystallization</a> · <a href="https://github.com/sparkainlp-x/refusing-membrane">refusing-membrane</a> · <a href="https://github.com/sparkainlp-x/quantum-projection">quantum-projection</a> · Source: <a href="https://github.com/sparkainlp-x/holographic-thoughts">holographic-thoughts</a> · Licence: <a href="https://github.com/sparkainlp-x/holographic-thoughts/blob/main/LICENSE">AGPL-3.0-only</a>
+        Synthetic toy, classical simulation — not physical holography or quantum hardware. Author: Jean-François Brisson · ORCID <a href="https://orcid.org/0009-0000-9778-5374">0009-0000-9778-5374</a> · Models: <a href="https://github.com/sparkainlp-x/yin-yang-membranes">yin-yang-membranes</a> · <a href="https://github.com/sparkainlp-x/membrane-crystallization">membrane-crystallization</a> · <a href="https://github.com/sparkainlp-x/refusing-membrane">refusing-membrane</a> · <a href="https://github.com/sparkainlp-x/quantum-projection">quantum-projection</a> · <a href="https://github.com/sparkainlp-x/membrane-capacity">membrane-capacity</a> · Source: <a href="https://github.com/sparkainlp-x/holographic-thoughts">holographic-thoughts</a> · Licence: <a href="https://github.com/sparkainlp-x/holographic-thoughts/blob/main/LICENSE">AGPL-3.0-only</a>
       </footer>
     </div>
 
@@ -1274,8 +1312,312 @@ const Gate = (() => {
   };
 })();
 
+
+/* ================= VIEW 5 : THE SHATTERPOINT ================= */
+const Shatter = (() => {
+  const N = 64, COLS = 8, PMAX = 192;
+  const GRID_P = [1, 2, 4, 8, 12, 16, 24, 32, 48, 64, 96, 128, 160, 192];
+  const poolRng = mulberry32(90210);
+  const poolG = makeGauss(poolRng);
+  const patternPool = [];
+  for (let i = 0; i < PMAX; i++) {
+    const v = [];
+    for (let k = 0; k < N; k++) v.push([poolG(), poolG()]);
+    patternPool.push(vnormalize(v));
+  }
+  const grid = setupCanvas("shatterCanvas", 560, 560);
+  const chart = setupCanvas("shatterChart", 920, 160);
+  let P = 12, sigma = 0.20;
+  let W = null; // N x N complex matrix as flat array of [re,im], row-major
+  let patterns = [];
+  let display = patternPool[0].map(z => [z[0], z[1]]);
+  let morph = null;
+  let probes = 0, correct = 0;
+  let curve = []; // {p, acc}
+  let busy = false;
+
+  const pEl = document.getElementById("shatterP");
+  const pVal = document.getElementById("shatterPVal");
+  const sEl = document.getElementById("shatterSigma");
+  const sVal = document.getElementById("shatterSigmaVal");
+  const loadVal = document.getElementById("shatterLoadVal");
+  const loadFill = document.getElementById("shatterLoadFill");
+  const readout = document.getElementById("shatterReadout");
+  const tallyEl = document.getElementById("shatterTally");
+  const probeBtn = document.getElementById("shatterProbeBtn");
+  const sweepBtn = document.getElementById("shatterSweepBtn");
+  const breakBtn = document.getElementById("shatterBreakBtn");
+
+  function setLoad() {
+    const r = P / N;
+    loadVal.textContent = P + " / " + N + " = " + r.toFixed(2);
+    loadFill.style.width = Math.min(100, r * 100).toFixed(1) + "%";
+    loadFill.style.background = r > 1 ? "var(--red)" : (r > 0.5 ? "var(--amber)" : "var(--cyan)");
+  }
+  function updateTally() {
+    const acc = probes ? (correct / probes) : null;
+    tallyEl.textContent = "session — probes " + probes + " · correct " + correct +
+      " · accuracy " + (acc === null ? "—" : acc.toFixed(3));
+  }
+  function rebuild() {
+    patterns = patternPool.slice(0, P);
+    // W_ik = Σ_μ p_μ[i] * conj(p_μ[k])
+    W = new Array(N * N);
+    for (let i = 0; i < N * N; i++) W[i] = [0, 0];
+    for (const p of patterns) {
+      for (let i = 0; i < N; i++) {
+        for (let k = 0; k < N; k++) {
+          // p[i] * conj(p[k])
+          const a = p[i], b = p[k];
+          const re = a[0] * b[0] + a[1] * b[1];
+          const im = a[1] * b[0] - a[0] * b[1];
+          const idx = i * N + k;
+          W[idx][0] += re; W[idx][1] += im;
+        }
+      }
+    }
+    setLoad();
+  }
+  rebuild();
+
+  function applyW(probe) {
+    const y = new Array(N);
+    for (let i = 0; i < N; i++) {
+      let re = 0, im = 0;
+      for (let k = 0; k < N; k++) {
+        const w = W[i * N + k], z = probe[k];
+        re += w[0] * z[0] - w[1] * z[1];
+        im += w[0] * z[1] + w[1] * z[0];
+      }
+      y[i] = [re, im];
+    }
+    return vnormalize(y);
+  }
+  function classify(y) {
+    let best = 0, bestAbs = -1;
+    const mags = [];
+    for (let i = 0; i < patterns.length; i++) {
+      const m = C.abs(inner(patterns[i], y));
+      mags.push(m);
+      if (m > bestAbs) { bestAbs = m; best = i; }
+    }
+    return { winner: best, mags };
+  }
+  function trialOnce(pCount, sig, rng) {
+    const pats = patternPool.slice(0, pCount);
+    // build W for this trial
+    const Ww = new Array(N * N);
+    for (let i = 0; i < N * N; i++) Ww[i] = [0, 0];
+    for (const p of pats) {
+      for (let i = 0; i < N; i++) for (let k = 0; k < N; k++) {
+        const a = p[i], b = p[k];
+        const idx = i * N + k;
+        Ww[idx][0] += a[0] * b[0] + a[1] * b[1];
+        Ww[idx][1] += a[1] * b[0] - a[0] * b[1];
+      }
+    }
+    const truth = Math.floor(rng() * pCount);
+    const g = makeGauss(rng);
+    const noisy = pats[truth].map(z => [z[0] + g() * sig, z[1] + g() * sig]);
+    const probe = vnormalize(noisy);
+    const y = new Array(N);
+    for (let i = 0; i < N; i++) {
+      let re = 0, im = 0;
+      for (let k = 0; k < N; k++) {
+        const w = Ww[i * N + k], z = probe[k];
+        re += w[0] * z[0] - w[1] * z[1];
+        im += w[0] * z[1] + w[1] * z[0];
+      }
+      y[i] = [re, im];
+    }
+    const yn = vnormalize(y);
+    let winner = 0, best = -1;
+    for (let i = 0; i < pCount; i++) {
+      const m = C.abs(inner(pats[i], yn));
+      if (m > best) { best = m; winner = i; }
+    }
+    return winner === truth;
+  }
+  function accuracyAt(pCount, sig, trials, seed) {
+    const rng = mulberry32(seed);
+    let ok = 0;
+    for (let t = 0; t < trials; t++) if (trialOnce(pCount, sig, rng)) ok++;
+    return ok / trials;
+  }
+
+  function sendProbe(now) {
+    if (busy) return;
+    const truth = Math.floor(Math.random() * P);
+    const noisy = patterns[truth].map(z => [z[0] + gauss() * sigma, z[1] + gauss() * sigma]);
+    const probe = vnormalize(noisy);
+    const y = applyW(probe);
+    const { winner, mags } = classify(y);
+    const ok = winner === truth;
+    probes++; if (ok) correct++;
+    updateTally();
+    morph = { from: display.map(z => [z[0], z[1]]), probe, to: y, t0: now, dur: 700 };
+    readout.innerHTML =
+      "true pattern <span class='cy'>#" + truth + "</span> · recalled <span class='cy'>#" + winner + "</span> " +
+      (ok ? "<span class='ok'>correct</span>" : "<span class='bad'>misread</span>") +
+      "\n|⟨p_win|y⟩| = " + fmt(mags[winner]) + " · P = " + P + " · σ = " + sigma.toFixed(2) +
+      " · load P/N = " + (P / N).toFixed(2);
+  }
+
+  function drawChart() {
+    const { ctx, w, h } = chart;
+    ctx.clearRect(0, 0, w, h);
+    ctx.strokeStyle = LINE;
+    ctx.beginPath();
+    for (const gy of [0.25, 0.5, 0.75, 1.0]) {
+      const y = h - 10 - gy * (h - 28);
+      ctx.moveTo(40, y); ctx.lineTo(w - 8, y);
+    }
+    ctx.stroke();
+    ctx.fillStyle = FAINT;
+    ctx.font = "10px ui-monospace, monospace";
+    ctx.textAlign = "right";
+    ctx.fillText("1.0", 36, h - 10 - (h - 28) + 3);
+    ctx.fillText("0.5", 36, h - 10 - 0.5 * (h - 28) + 3);
+    ctx.fillText("0", 36, h - 8);
+    // P90 line
+    const y90 = h - 10 - 0.9 * (h - 28);
+    ctx.strokeStyle = "rgba(255,180,84,0.35)";
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.moveTo(40, y90); ctx.lineTo(w - 8, y90); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = AMBER; ctx.textAlign = "left";
+    ctx.fillText("P90", w - 36, y90 - 4);
+    if (curve.length < 2) {
+      ctx.fillStyle = DIM; ctx.textAlign = "center";
+      ctx.fillText("run a capacity sweep to plot accuracy vs P", w / 2, h / 2);
+      return;
+    }
+    const pMax = Math.max(...curve.map(c => c.p), 1);
+    ctx.beginPath();
+    curve.forEach((c, i) => {
+      const x = 40 + (w - 56) * Math.log(c.p) / Math.log(pMax);
+      const y = h - 10 - Math.min(1, c.acc) * (h - 28);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    });
+    ctx.strokeStyle = CYAN; ctx.lineWidth = 1.6; ctx.stroke();
+    curve.forEach(c => {
+      const x = 40 + (w - 56) * Math.log(c.p) / Math.log(pMax);
+      const y = h - 10 - Math.min(1, c.acc) * (h - 28);
+      ctx.beginPath(); ctx.arc(x, y, 3, 0, 2 * Math.PI);
+      ctx.fillStyle = c.acc >= 0.9 ? CYAN : (c.acc >= 0.5 ? AMBER : RED);
+      ctx.fill();
+    });
+  }
+
+  function runSweep(untilBreak) {
+    if (busy) return;
+    busy = true;
+    probeBtn.disabled = sweepBtn.disabled = breakBtn.disabled = true;
+    curve = [];
+    const sig = sigma;
+    const list = untilBreak ? [] : GRID_P.slice();
+    let p = untilBreak ? 1 : null;
+    readout.textContent = untilBreak ? "Pushing P until accuracy < 0.5…" : "Running capacity sweep…";
+    function step() {
+      let nextP;
+      if (untilBreak) {
+        nextP = p;
+      } else {
+        if (!list.length) { finish(); return; }
+        nextP = list.shift();
+      }
+      const trials = nextP >= 96 ? 40 : 60;
+      const acc = accuracyAt(nextP, sig, trials, 4242 + nextP * 17);
+      curve.push({ p: nextP, acc });
+      curve.sort((a, b) => a.p - b.p);
+      drawChart();
+      readout.innerHTML = "sweep σ = " + sig.toFixed(2) + " · P = " + nextP +
+        " · accuracy = <span class='cy'>" + acc.toFixed(3) + "</span>" +
+        " (" + trials + " trials)";
+      if (untilBreak) {
+        if (acc < 0.5 || nextP >= PMAX) {
+          const shatterP = nextP;
+          P = shatterP; pEl.value = String(P); pVal.textContent = String(P);
+          rebuild();
+          readout.innerHTML += "\n<span class='bad'>shatterpoint</span> near P = " + shatterP +
+            " at σ = " + sig.toFixed(2) + " (browser toy; Python P90 numbers are in membrane-capacity)";
+          finish(); return;
+        }
+        // grow P: double until 32, then +16
+        p = nextP < 32 ? nextP * 2 : Math.min(PMAX, nextP + 16);
+        if (p === nextP) p = Math.min(PMAX, nextP + 1);
+        setTimeout(step, 0);
+      } else {
+        setTimeout(step, 0);
+      }
+    }
+    function finish() {
+      busy = false;
+      probeBtn.disabled = sweepBtn.disabled = breakBtn.disabled = false;
+      const p90 = curve.filter(c => c.acc >= 0.9).map(c => c.p);
+      const note = p90.length ? ("browser P90 ≈ " + Math.max(...p90)) : "browser P90 below smallest grid point";
+      readout.innerHTML += "\n" + note + " · not a substitute for the Python curves";
+    }
+    setTimeout(step, 0);
+  }
+
+  pEl.addEventListener("input", () => {
+    P = Number(pEl.value); pVal.textContent = String(P); rebuild();
+    probes = 0; correct = 0; updateTally();
+  });
+  sEl.addEventListener("input", () => {
+    sigma = Number(sEl.value); sVal.textContent = sigma.toFixed(2);
+  });
+  probeBtn.addEventListener("click", () => sendProbe(performance.now()));
+  sweepBtn.addEventListener("click", () => runSweep(false));
+  breakBtn.addEventListener("click", () => runSweep(true));
+
+  function ease(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+  function draw(now) {
+    if (morph) {
+      const t = Math.min(1, (now - morph.t0) / morph.dur);
+      if (t < 0.28) display = morph.probe;
+      else {
+        const e = ease((t - 0.28) / 0.72);
+        display = vnormalize(morph.probe.map((a, k) => {
+          const b = morph.to[k];
+          return [a[0] + (b[0] - a[0]) * e, a[1] + (b[1] - a[1]) * e];
+        }));
+      }
+      if (t >= 1) { display = morph.to; morph = null; }
+    }
+    const { ctx, w, h } = grid;
+    ctx.clearRect(0, 0, w, h);
+    const pad = 28, gap = 2;
+    const cell = (Math.min(w, h) - 2 * pad - (COLS - 1) * gap) / COLS;
+    let maxMag = 0;
+    for (const z of display) maxMag = Math.max(maxMag, C.abs(z));
+    for (let i = 0; i < N; i++) {
+      const row = Math.floor(i / COLS), col = i % COLS;
+      const x = pad + col * (cell + gap), y = pad + row * (cell + gap);
+      const z = display[i];
+      const magF = maxMag > 0 ? C.abs(z) / maxMag : 0;
+      const hue = ((C.phase(z) * 180 / Math.PI) % 360 + 360) % 360;
+      ctx.fillStyle = "hsl(" + hue + ",85%," + (12 + 48 * magF) + "%)";
+      ctx.fillRect(x, y, cell, cell);
+    }
+    ctx.fillStyle = DIM;
+    ctx.font = "12px ui-monospace, monospace";
+    ctx.textAlign = "center";
+    ctx.fillText(morph ? "probe → W·probe recall" : "8×8 · hue = phase · light = |z| · P = " + P, w / 2, h - 10);
+    drawChart();
+  }
+  let raf = null;
+  function frame(now) { draw(now); raf = requestAnimationFrame(frame); }
+  setLoad(); updateTally(); drawChart();
+  return {
+    start() { if (raf === null) raf = requestAnimationFrame(frame); },
+    stop() { if (raf !== null) { cancelAnimationFrame(raf); raf = null; } }
+  };
+})();
+
 /* ================= tabs ================= */
-const views = { field: Field, loop: Loop, crystal: Crystal, gate: Gate };
+const views = { field: Field, loop: Loop, crystal: Crystal, gate: Gate, shatter: Shatter };
 let activeView = "field";
 document.querySelectorAll("nav.tabs button").forEach(btn => {
   btn.addEventListener("click", () => {

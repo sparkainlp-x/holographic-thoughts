@@ -11,8 +11,8 @@ license: AGPL-3.0-only
 repository-code: "https://github.com/sparkainlp-x/holographic-thoughts"
 url: "https://sparkainlp-x.github.io/holographic-thoughts/"
 abstract: >-
-  Self-contained interactive web page with four toy views of
+  Self-contained interactive web page with five toy views of
   holographic-membrane models (projection recall, coupled loop,
-  Hebbian crystallization, calibrated refusal gate). Synthetic toy,
+  Hebbian crystallization, calibrated refusal gate, outer-product capacity). Synthetic toy,
   classical simulation; not physical holography or quantum hardware.
 keywords: [holographic-memory, interactive-demo, visualization, reproducible-research]
