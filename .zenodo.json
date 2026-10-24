@@ -6,6 +6,6 @@
   "license": "AGPL-3.0-only",
   "version": "0.1.0",
   "keywords": ["holographic-memory", "interactive-demo", "visualization", "reproducible-research"],
-  "notes": "Synthetic toy, classical simulation. Browser views are illustrative; measured numbers come from the linked Python models.",
+  "notes": "Synthetic toy, classical simulation. Browser views are illustrative; measured numbers come from the linked Python models. Concept DOI (all versions) 10.5281/zenodo.23619508; version DOI for v0.1.0 10.5281/zenodo.23619509.",
   "communities": [{"identifier": "spark-ai-nlp"}]
 }
