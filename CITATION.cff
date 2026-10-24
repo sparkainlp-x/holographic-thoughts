@@ -3,6 +3,14 @@ message: "If you use this software, please cite it as below."
 title: Holographic Thoughts
 version: 0.1.0
 date-released: 2026-10-21
+doi: "10.5281/zenodo.23619508"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.23619508"
+    description: "Concept DOI (all versions)"
+  - type: doi
+    value: "10.5281/zenodo.23619509"
+    description: "Version DOI for v0.1.0"
 authors:
   - family-names: Brisson
     given-names: Jean-François

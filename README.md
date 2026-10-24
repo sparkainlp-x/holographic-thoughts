@@ -53,6 +53,8 @@ The script uses only the Python standard library. It does not run the simulation
 
 Releases are archived on Zenodo; see [CHANGELOG.md](CHANGELOG.md) and [CITATION.cff](CITATION.cff). Version 0.1.0 is the first tagged release.
 
+Cite the concept DOI [10.5281/zenodo.23619508](https://doi.org/10.5281/zenodo.23619508) for all versions, or the version DOI [10.5281/zenodo.23619509](https://doi.org/10.5281/zenodo.23619509) for v0.1.0. See also [CITATION.cff](CITATION.cff).
+
 Author: Jean-François Brisson ([ORCID 0009-0000-9778-5374](https://orcid.org/0009-0000-9778-5374)), Spark AI NLP, Fredericton, New Brunswick, Canada.
 
 Copyright (c) 2026 Jean-François Brisson, Spark AI NLP.
