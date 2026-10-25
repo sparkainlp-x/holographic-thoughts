@@ -1,0 +1,43 @@
+{
+  "kind": "SYNTHETIC classical fixed-scene Monte Carlo",
+  "seed": 42,
+  "trials_per_level": 40,
+  "grid": [
+    96,
+    96
+  ],
+  "wavelength_m": 5.32e-07,
+  "pixel_pitch_m": 6.5e-06,
+  "recording_distance_m": 0.004,
+  "true_reconstruction_distance_mm": -4.0,
+  "carrier_bins_x": 24,
+  "carrier_bins_y": 0,
+  "filter_radius_bins": 9,
+  "filter_inner_radius_fraction": 0.75,
+  "peak_expected_electrons": [
+    200,
+    2000
+  ],
+  "read_noise_electrons_std": 3.0,
+  "tolerance_mm": 0.25,
+  "coarse_distance_range_m": [
+    -0.008,
+    0.0
+  ],
+  "coarse_points": 65,
+  "refinement_points": 21,
+  "focus_metric": "normalized intensity gradient",
+  "propagation": "periodic scalar angular spectrum",
+  "evanescent_components": "discarded",
+  "python_version": "3.13.5",
+  "numpy_version": "2.5.4",
+  "limitations": [
+    "One fixed synthetic scene.",
+    "Periodic propagation without padding.",
+    "No saturation, quantization, or fixed-pattern noise.",
+    "Chosen Fourier filter; not a bandwidth guarantee.",
+    "Focus metric is not universally valid.",
+    "Percentiles describe trial spread, not a truth confidence interval.",
+    "No hardware or quantum validation."
+  ]
+}

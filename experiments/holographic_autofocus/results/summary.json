@@ -1,0 +1,34 @@
+{
+  "noise_free_estimate_mm": -4.0,
+  "noise_free_at_scan_edge": false,
+  "results": [
+    {
+      "peak_expected_electrons": 200,
+      "trials": 40,
+      "mean_distance_mm": -3.9862499999999996,
+      "std_distance_mm": 0.2609431856819531,
+      "bias_mm": 0.013749999999999884,
+      "rmse_mm": 0.2580273725789574,
+      "within_0p25_mm_fraction": 0.7,
+      "edge_fraction": 0.0,
+      "empirical_2p5_97p5_mm": [
+        -4.3790625,
+        -3.6146875
+      ]
+    },
+    {
+      "peak_expected_electrons": 2000,
+      "trials": 40,
+      "mean_distance_mm": -3.984375,
+      "std_distance_mm": 0.08285519883724253,
+      "bias_mm": 0.0156249999999999,
+      "rmse_mm": 0.08329165624478851,
+      "within_0p25_mm_fraction": 1.0,
+      "edge_fraction": 0.0,
+      "empirical_2p5_97p5_mm": [
+        -4.1378125,
+        -3.8371874999999998
+      ]
+    }
+  ]
+}
